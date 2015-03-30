@@ -3,7 +3,6 @@ package pl.edu.agh.dbclient.connections;
 import pl.edu.agh.dbclient.UserSession;
 import pl.edu.agh.dbclient.connections.strategies.PostgreSQLConnection;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;

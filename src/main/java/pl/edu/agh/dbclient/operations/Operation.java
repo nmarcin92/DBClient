@@ -6,11 +6,11 @@ import java.util.Map;
 /**
  * @author mnowak
  */
-public abstract class Operation<T> {
+public abstract class Operation {
 
     private final Map<String, String> attributes = new HashMap<String, String>();
 
-    public Operation<T> addParameter(String name, String value) {
+    public Operation addParameter(String name, String value) {
         this.attributes.put(name, value);
         return this;
     }

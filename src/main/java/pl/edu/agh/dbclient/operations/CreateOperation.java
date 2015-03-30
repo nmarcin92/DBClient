@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * @author mnowak
  */
-public class CreateOperation extends Operation<CreateOperation> {
+public class CreateOperation extends Operation {
 
     private final OperationContext type;
     private final String entityName;

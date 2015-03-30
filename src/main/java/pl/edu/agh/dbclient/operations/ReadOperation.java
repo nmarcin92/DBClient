@@ -3,5 +3,5 @@ package pl.edu.agh.dbclient.operations;
 /**
  * @author mnowak
  */
-public class ReadOperation extends Operation<ReadOperation> {
+public class ReadOperation extends Operation {
 }
