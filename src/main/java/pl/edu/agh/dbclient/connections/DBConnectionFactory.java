@@ -3,6 +3,8 @@ package pl.edu.agh.dbclient.connections;
 import pl.edu.agh.dbclient.UserSession;
 import pl.edu.agh.dbclient.connections.strategies.PostgreSQLConnection;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,7 +14,7 @@ import java.util.Map;
 public class DBConnectionFactory {
 
     private static final Map<UserSession, DBConnection> CURRENT_CONNECTIONS = new HashMap<UserSession, DBConnection>();
-    private static final Map<DBConnectionType, Class<? extends DBConnection>> CONNECTION_STRATEGIES = new HashMap<DBConnectionType, Class<? extends DBConnection>>();
+    private static final Map<DBConnectionType, Class<? extends DBConnection>> CONNECTION_STRATEGIES = new EnumMap<DBConnectionType, Class<? extends DBConnection>>(DBConnectionType.class);
 
     static {
         CONNECTION_STRATEGIES.put(DBConnectionType.POSTGRESQL, PostgreSQLConnection.class);
@@ -27,6 +29,7 @@ public class DBConnectionFactory {
                 throw new UnsupportedOperationException("This connection type is not supported.");
             }
             DBConnection conn = connectionClass.newInstance();
+            conn.setCredentials(session.getDBCredentials());
             CURRENT_CONNECTIONS.put(session, conn);
             return conn;
         }
