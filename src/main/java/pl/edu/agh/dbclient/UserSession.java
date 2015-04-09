@@ -8,12 +8,20 @@ import pl.edu.agh.dbclient.connections.DBCredentials;
  */
 public class UserSession {
 
+    private final DBConnectionType connectionType;
+    private final DBCredentials credentials;
+
+    public UserSession(DBConnectionType connectionType, DBCredentials credentials) {
+        this.connectionType = connectionType;
+        this.credentials = credentials;
+    }
+
     public DBConnectionType getConnectionType() {
-        return null;
+        return connectionType;
     }
 
     public DBCredentials getDBCredentials() {
-        return null;
+        return credentials;
     }
 
 }
