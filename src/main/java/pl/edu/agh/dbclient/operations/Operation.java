@@ -1,6 +1,5 @@
 package pl.edu.agh.dbclient.operations;
 
-import java.lang.reflect.Parameter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,7 +8,7 @@ import java.util.Map;
  */
 public abstract class Operation<T extends Operation<T>> {
 
-    private final Map<Parameter, String> attributes = new HashMap<Parameter, String>();
+    private final Map<Parameter, String> parameters = new HashMap<Parameter, String>();
     private final OperationContext context;
     private final String entityName;
 
@@ -27,7 +26,7 @@ public abstract class Operation<T extends Operation<T>> {
     }
 
     public T addParameter(Parameter param, String value) {
-        attributes.put(param, value);
+        parameters.put(param, value);
         return (T) this;
     }
 
@@ -35,9 +34,9 @@ public abstract class Operation<T extends Operation<T>> {
         return addParameter(param, null);
     }
 
-    public boolean hasAttribute(String name) { return attributes.containsKey(name); }
+    public boolean hasParameter(Parameter param) { return parameters.containsKey(param); }
 
-    public String getAttribute(String name) { return attributes.get(name); }
+    public String getParameter(Parameter param) { return parameters.get(param); }
 
     public enum OperationContext {
         DATABASE, ENTITY, RECORD; // .. CONSTRAINT, INDEX etc
