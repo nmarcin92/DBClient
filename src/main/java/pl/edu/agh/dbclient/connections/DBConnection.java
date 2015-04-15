@@ -5,7 +5,7 @@ import pl.edu.agh.dbclient.operations.CreateOperation;
 import pl.edu.agh.dbclient.operations.DeleteOperation;
 import pl.edu.agh.dbclient.operations.ReadOperation;
 import pl.edu.agh.dbclient.operations.UpdateOperation;
-import pl.edu.agh.dbclient.results.QueryResult;
+import pl.edu.agh.dbclient.objects.QueryResult;
 
 /**
  * @author mnowak

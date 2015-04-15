@@ -1,24 +1,25 @@
 package pl.edu.agh.dbclient.connections.strategies;
 
-import com.google.common.base.Joiner;
 import pl.edu.agh.dbclient.UserSession;
 import pl.edu.agh.dbclient.connections.DBConnection;
 import pl.edu.agh.dbclient.connections.DBConnectionFactory;
 import pl.edu.agh.dbclient.connections.DBConnectionType;
 import pl.edu.agh.dbclient.connections.DBCredentials;
 import pl.edu.agh.dbclient.exceptions.ConnectionInitializationException;
-import pl.edu.agh.dbclient.operations.Operation;
-import pl.edu.agh.dbclient.operations.ReadOperation;
-import pl.edu.agh.dbclient.results.Entity;
-import pl.edu.agh.dbclient.results.EntityAttribute;
-import pl.edu.agh.dbclient.results.QueryResult;
-import pl.edu.agh.dbclient.operations.CreateOperation;
+import pl.edu.agh.dbclient.operations.*;
+import pl.edu.agh.dbclient.objects.Entity;
+import pl.edu.agh.dbclient.objects.EntityAttribute;
+import pl.edu.agh.dbclient.objects.EntityRow;
+import pl.edu.agh.dbclient.objects.QueryResult;
 import pl.edu.agh.dbclient.utils.Configuration;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author mnowak
@@ -63,6 +64,46 @@ public class PostgreSQLConnection implements DBConnection {
         return qr;
     }
 
+    @Override
+    public QueryResult performRead(ReadOperation operation) {
+        QueryResult qr = new QueryResult();
+
+        try {
+            initializeConnection();
+            switch (operation.getContext()) {
+                case ENTITY:
+                    return readTableSchema(operation);
+                case RECORD:
+                    return readRow(operation);
+                default:
+                    qr.setSuccess(false);
+                    qr.addError("Unsupported operation context");
+                    break;
+            }
+        } catch (Exception e) {
+            LOGGER.error("Error while reading");
+            qr.setSuccess(false);
+            qr.addError(e.getMessage());
+        }
+
+        return qr;
+    }
+
+    @Override
+    public QueryResult performUpdate(UpdateOperation operation) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public QueryResult performDelete(DeleteOperation operation) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public QueryResult executeCommand(String command) {
+        throw new NotImplementedException();
+    }
+
     private QueryResult insertRow(CreateOperation operation) {
         QueryResult qr = new QueryResult();
 
@@ -86,28 +127,40 @@ public class PostgreSQLConnection implements DBConnection {
         return qr;
     }
 
-    @Override
-    public QueryResult performRead(ReadOperation operation) {
+    private QueryResult readRow(ReadOperation operation) {
         QueryResult qr = new QueryResult();
+        StringBuilder queryBuilder = new StringBuilder("SELECT ");
+        boolean entireRecord = operation.hasParameter(ReadOperation.ReadParameter.ENTIRE_RECORD);
+        List<String> attributes = entireRecord ? null :
+                Arrays.asList(operation.getParameter(ReadOperation.ReadParameter.ATTRIBUTE_NAMES).split(","));
+        if (operation.hasParameter(ReadOperation.ReadParameter.ENTIRE_RECORD)) {
+            queryBuilder.append('*');
+        } else {
+            queryBuilder.append(operation.getParameter(ReadOperation.ReadParameter.ATTRIBUTE_NAMES));
+        }
+        queryBuilder.append(" FROM ").append(operation.getEntityName());
 
         try {
-            initializeConnection();
-            switch (operation.getContext()) {
-                case ENTITY:
-                    return readTableSchema(operation);
-                default:
-                    qr.setSuccess(false);
-                    qr.addError("Unsupported operation context");
-                    break;
+            qr = readTableSchema(operation);
+            ResultSet rs = conn.createStatement().executeQuery(queryBuilder.toString());
+            while (rs.next()) {
+                EntityRow row = new EntityRow();
+                for (EntityAttribute entityAttribute : qr.getEntity().getAttributes()) {
+                    if (entireRecord || attributes.contains(entityAttribute.getAttributeName())) {
+                        row.getAttributes().put(entityAttribute.getAttributeName(), rs.getString(entityAttribute.getAttributeName()));
+                    }
+                }
+                qr.getEntity().getRows().add(row);
             }
-        } catch (Exception e) {
-            LOGGER.error("Error while reading");
+        } catch (SQLException e) {
+            LOGGER.error("Error while reading records", e);
             qr.setSuccess(false);
-            qr.addError(e.getMessage());
+            qr.addError(e.getErrorCode() + " " + e.getMessage());
         }
 
         return qr;
     }
+
 
     private QueryResult readTableSchema(ReadOperation operation) {
         QueryResult qr = new QueryResult();
@@ -161,6 +214,24 @@ public class PostgreSQLConnection implements DBConnection {
         }
 
         return qr;
+    }
+
+    public static void main(String[] args) {
+        DBCredentials credentials = new DBCredentials("postgres", "postgres", "localhost:5432", "postgres");
+        try {
+            DBConnection conn = DBConnectionFactory.getOrCreateConnection(new UserSession(DBConnectionType.POSTGRESQL, credentials));
+            //QueryResult qr = conn.performCreate(new CreateOperation(Operation.OperationContext.ENTITY, "tabela_3"));
+            //  QueryResult qr = conn.performRead(new ReadOperation(Operation.OperationContext.ENTITY, "tabela_2"));
+            ReadOperation readOperation = new ReadOperation(Operation.OperationContext.RECORD, "tabela_2");
+            readOperation.addParameter(ReadOperation.ReadParameter.ENTIRE_RECORD);
+            QueryResult qr = conn.performRead(readOperation);
+            System.out.println("a");
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

@@ -1,9 +1,7 @@
-package pl.edu.agh.dbclient.results;
+package pl.edu.agh.dbclient.objects;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author mnowak

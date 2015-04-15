@@ -1,4 +1,4 @@
-package pl.edu.agh.dbclient.results;
+package pl.edu.agh.dbclient.objects;
 
 import java.util.HashMap;
 import java.util.Map;

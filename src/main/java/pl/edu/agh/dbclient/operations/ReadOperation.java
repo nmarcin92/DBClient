@@ -13,5 +13,7 @@ public class ReadOperation extends Operation<ReadOperation> {
         super(context, entityName);
     }
 
-
+    public enum ReadParameter implements Parameter {
+        ENTIRE_RECORD, ATTRIBUTE_NAMES;
+    }
 }
