@@ -1,4 +1,4 @@
-package pl.edu.agh.dbclient.operations;
+package pl.edu.agh.dbclient.objects.operations;
 
 /**
  * @author mnowak

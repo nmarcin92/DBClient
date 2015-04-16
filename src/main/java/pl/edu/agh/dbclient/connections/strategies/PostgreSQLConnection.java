@@ -6,7 +6,7 @@ import pl.edu.agh.dbclient.connections.DBConnectionFactory;
 import pl.edu.agh.dbclient.connections.DBConnectionType;
 import pl.edu.agh.dbclient.connections.DBCredentials;
 import pl.edu.agh.dbclient.exceptions.ConnectionInitializationException;
-import pl.edu.agh.dbclient.operations.*;
+import pl.edu.agh.dbclient.objects.operations.*;
 import pl.edu.agh.dbclient.objects.Entity;
 import pl.edu.agh.dbclient.objects.EntityAttribute;
 import pl.edu.agh.dbclient.objects.EntityRow;

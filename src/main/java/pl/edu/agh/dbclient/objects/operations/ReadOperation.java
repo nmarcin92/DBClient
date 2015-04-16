@@ -1,8 +1,4 @@
-package pl.edu.agh.dbclient.operations;
-
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Set;
+package pl.edu.agh.dbclient.objects.operations;
 
 /**
  * @author mnowak
