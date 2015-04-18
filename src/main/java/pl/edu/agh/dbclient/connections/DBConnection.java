@@ -1,9 +1,8 @@
 package pl.edu.agh.dbclient.connections;
 
-import org.apache.log4j.Logger;
 import pl.edu.agh.dbclient.exceptions.DBClientException;
-import pl.edu.agh.dbclient.objects.operations.*;
 import pl.edu.agh.dbclient.objects.QueryResult;
+import pl.edu.agh.dbclient.objects.operations.*;
 
 /**
  * @author mnowak
