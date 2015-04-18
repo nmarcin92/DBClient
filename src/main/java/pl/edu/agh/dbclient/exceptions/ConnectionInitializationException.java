@@ -3,7 +3,7 @@ package pl.edu.agh.dbclient.exceptions;
 /**
  * @author mnowak
  */
-public class ConnectionInitializationException extends Exception {
+public class ConnectionInitializationException extends DBClientException {
 
     public ConnectionInitializationException(String msg, Throwable e) {
         super(msg, e);

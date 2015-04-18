@@ -7,23 +7,25 @@ import pl.edu.agh.dbclient.WebAppConstants;
 import pl.edu.agh.dbclient.components.OperationService;
 import pl.edu.agh.dbclient.exceptions.DBClientException;
 import pl.edu.agh.dbclient.objects.QueryResult;
-import pl.edu.agh.dbclient.objects.operations.CreateOperation;
+import pl.edu.agh.dbclient.objects.operations.CommandOperation;
 
 /**
  * @author mnowak
  */
-@RestController
-@RequestMapping(value = WebAppConstants.CREATE_RESOURCE_PATH)
-public class CreateController extends HandlingController {
 
-    private static Logger LOGGER = Logger.getLogger(CreateController.class);
+@RestController
+@RequestMapping(value = WebAppConstants.COMMAND_RESOURCE_PATH)
+public class CommandController {
+
+    private static Logger LOGGER = Logger.getLogger(CommandController.class);
 
     @Autowired
     private OperationService operationService;
 
     @RequestMapping(method = RequestMethod.POST)
     public
-    @ResponseBody QueryResult executeCreateOperation(@RequestBody CreateOperation operation) throws DBClientException {
-        return operationService.executeCreate(operation);
+    @ResponseBody QueryResult executeCommandOperation(@RequestBody CommandOperation operation) throws DBClientException {
+        return operationService.executeCommand(operation);
     }
+
 }

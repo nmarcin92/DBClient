@@ -1,10 +1,8 @@
 package pl.edu.agh.dbclient.connections;
 
 import org.apache.log4j.Logger;
-import pl.edu.agh.dbclient.objects.operations.CreateOperation;
-import pl.edu.agh.dbclient.objects.operations.DeleteOperation;
-import pl.edu.agh.dbclient.objects.operations.ReadOperation;
-import pl.edu.agh.dbclient.objects.operations.UpdateOperation;
+import pl.edu.agh.dbclient.exceptions.DBClientException;
+import pl.edu.agh.dbclient.objects.operations.*;
 import pl.edu.agh.dbclient.objects.QueryResult;
 
 /**
@@ -12,18 +10,16 @@ import pl.edu.agh.dbclient.objects.QueryResult;
  */
 public interface DBConnection {
 
-    static final Logger LOGGER = Logger.getLogger(DBConnection.class);
-
     public void setCredentials(DBCredentials credentials);
 
-    public QueryResult performCreate(CreateOperation operation);
+    public QueryResult performCreate(CreateOperation operation) throws DBClientException;
 
-    public QueryResult performRead(ReadOperation operation);
+    public QueryResult performRead(ReadOperation operation) throws DBClientException;
 
-    public QueryResult performUpdate(UpdateOperation operation);
+    public QueryResult performUpdate(UpdateOperation operation) throws DBClientException;
 
-    public QueryResult performDelete(DeleteOperation operation);
+    public QueryResult performDelete(DeleteOperation operation) throws DBClientException;
 
-    public QueryResult executeCommand(String command);
+    public QueryResult executeCommand(CommandOperation command) throws DBClientException;
 
 }

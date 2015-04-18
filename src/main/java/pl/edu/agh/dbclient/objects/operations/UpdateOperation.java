@@ -5,6 +5,9 @@ package pl.edu.agh.dbclient.objects.operations;
  */
 public class UpdateOperation extends Operation<UpdateOperation> {
 
+    public UpdateOperation() {
+    }
+
     public UpdateOperation(OperationContext context, String entityName) {
         super(context, entityName);
     }
