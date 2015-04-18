@@ -5,19 +5,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.edu.agh.dbclient.components.CreateService;
-import pl.edu.agh.dbclient.components.ReadService;
+import pl.edu.agh.dbclient.components.DeleteService;
 
 /**
  * @author mnowak
  */
 @RestController
-@RequestMapping(value = "/create")
-public class CreateController {
+@RequestMapping(value = "/delete")
+public class DeleteController {
 
-    private static Logger LOGGER = Logger.getLogger(CreateController.class);
+    private static Logger LOGGER = Logger.getLogger(DeleteController.class);
 
     @Autowired
-    private CreateService createService;
-
+    private DeleteService deleteService;
 
 }

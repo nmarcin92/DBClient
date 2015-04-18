@@ -5,9 +5,12 @@ package pl.edu.agh.dbclient.connections;
  */
 public class DBCredentials {
 
-    private final String username, password;
-    private final String url;
-    private final String databaseName;
+    private String username, password;
+    private String url;
+    private String databaseName;
+
+    public DBCredentials() {
+    }
 
     public DBCredentials(String username, String password, String url, String databaseName) {
         this.username = username;

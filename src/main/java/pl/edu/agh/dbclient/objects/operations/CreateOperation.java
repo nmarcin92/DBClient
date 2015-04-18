@@ -1,4 +1,4 @@
-package pl.edu.agh.dbclient.operations;
+package pl.edu.agh.dbclient.objects.operations;
 
 /**
  * @author mnowak
@@ -9,7 +9,4 @@ public class CreateOperation extends Operation<CreateOperation> {
         super(context, entityName);
     }
 
-    public enum CreateParameter implements Parameter {
-        ENTIRE_RECORD, ATTRIBUTE_NAMES, ATTRIBUTE_VALUES;
-    }
  }

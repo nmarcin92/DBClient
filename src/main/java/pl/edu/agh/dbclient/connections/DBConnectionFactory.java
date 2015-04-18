@@ -1,6 +1,6 @@
 package pl.edu.agh.dbclient.connections;
 
-import pl.edu.agh.dbclient.UserSession;
+import pl.edu.agh.dbclient.objects.UserSession;
 import pl.edu.agh.dbclient.connections.strategies.PostgreSQLConnection;
 
 import java.util.EnumMap;
@@ -28,7 +28,7 @@ public class DBConnectionFactory {
                 throw new UnsupportedOperationException("This connection type is not supported.");
             }
             DBConnection conn = connectionClass.newInstance();
-            conn.setCredentials(session.getDBCredentials());
+            conn.setCredentials(session.getDbCredentials());
             CURRENT_CONNECTIONS.put(session, conn);
             return conn;
         }

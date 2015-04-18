@@ -1,10 +1,10 @@
 package pl.edu.agh.dbclient.connections;
 
 import org.apache.log4j.Logger;
-import pl.edu.agh.dbclient.operations.CreateOperation;
-import pl.edu.agh.dbclient.operations.DeleteOperation;
-import pl.edu.agh.dbclient.operations.ReadOperation;
-import pl.edu.agh.dbclient.operations.UpdateOperation;
+import pl.edu.agh.dbclient.objects.operations.CreateOperation;
+import pl.edu.agh.dbclient.objects.operations.DeleteOperation;
+import pl.edu.agh.dbclient.objects.operations.ReadOperation;
+import pl.edu.agh.dbclient.objects.operations.UpdateOperation;
 import pl.edu.agh.dbclient.objects.QueryResult;
 
 /**
