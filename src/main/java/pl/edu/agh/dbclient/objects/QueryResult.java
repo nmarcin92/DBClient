@@ -14,7 +14,7 @@ public class QueryResult {
     private boolean nextPage;
 
     public QueryResult() {
-        this.errors = new ArrayList<String>();
+        this.errors = new ArrayList<>();
         setSuccess(true);
         setNextPage(false);
     }

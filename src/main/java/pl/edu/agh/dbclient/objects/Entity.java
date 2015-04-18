@@ -9,8 +9,8 @@ import java.util.List;
 public class Entity {
 
     private final String entityName;
-    private List<EntityAttribute> attributes = new ArrayList<EntityAttribute>();
-    private List<EntityRow> rows = new ArrayList<EntityRow>();
+    private List<EntityAttribute> attributes = new ArrayList<>();
+    private List<EntityRow> rows = new ArrayList<>();
 
     public Entity(String entityName) {
         this.entityName = entityName;

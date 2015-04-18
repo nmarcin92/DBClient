@@ -2,9 +2,9 @@ package pl.edu.agh.dbclient.connections;
 
 import org.apache.log4j.Logger;
 import pl.edu.agh.dbclient.WebAppConstants;
+import pl.edu.agh.dbclient.connections.strategies.PostgreSQLConnection;
 import pl.edu.agh.dbclient.exceptions.ConnectionInitializationException;
 import pl.edu.agh.dbclient.objects.UserSession;
-import pl.edu.agh.dbclient.connections.strategies.PostgreSQLConnection;
 
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -16,8 +16,8 @@ import java.util.Map;
 public class DBConnectionFactory {
 
     private static final Logger LOGGER = Logger.getLogger(DBConnectionFactory.class);
-    private static final Map<UserSession, DBConnection> CURRENT_CONNECTIONS = new HashMap<UserSession, DBConnection>();
-    private static final Map<DBConnectionType, Class<? extends DBConnection>> CONNECTION_STRATEGIES = new EnumMap<DBConnectionType, Class<? extends DBConnection>>(DBConnectionType.class);
+    private static final Map<UserSession, DBConnection> CURRENT_CONNECTIONS = new HashMap<>();
+    private static final Map<DBConnectionType, Class<? extends DBConnection>> CONNECTION_STRATEGIES = new EnumMap<>(DBConnectionType.class);
 
     static {
         CONNECTION_STRATEGIES.put(DBConnectionType.POSTGRESQL, PostgreSQLConnection.class);

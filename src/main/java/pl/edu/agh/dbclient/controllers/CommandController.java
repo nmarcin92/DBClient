@@ -24,7 +24,8 @@ public class CommandController {
 
     @RequestMapping(method = RequestMethod.POST)
     public
-    @ResponseBody QueryResult executeCommandOperation(@RequestBody CommandOperation operation) throws DBClientException {
+    @ResponseBody
+    QueryResult executeCommandOperation(@RequestBody CommandOperation operation) throws DBClientException {
         return operationService.executeCommand(operation);
     }
 

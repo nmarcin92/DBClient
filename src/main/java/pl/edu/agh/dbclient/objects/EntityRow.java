@@ -11,7 +11,7 @@ public class EntityRow {
     private Map<String, String> attributes;
 
     public EntityRow() {
-        this.attributes = new HashMap<String, String>();
+        this.attributes = new HashMap<>();
     }
 
     public Map<String, String> getAttributes() {

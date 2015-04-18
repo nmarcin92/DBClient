@@ -8,17 +8,15 @@ import java.util.Map;
 /**
  * @author mnowak
  */
-public abstract class Operation<T extends Operation> {
+public abstract class Operation<T extends Operation<T>> {
 
-    private Map<OperationParameter, String> parameters = new EnumMap<OperationParameter, String>(OperationParameter.class);
+    private Map<OperationParameter, String> parameters = new EnumMap<>(OperationParameter.class);
     private OperationContext context;
     private String entityName;
     private UserSession userSession;
 
     public Operation() {
     }
-
-    ;
 
     public Operation(OperationContext context, String entityName) {
         this.context = context;
@@ -33,12 +31,13 @@ public abstract class Operation<T extends Operation> {
         return entityName;
     }
 
-    public <T extends Operation> T addParameter(OperationParameter param, String value) {
+    @SuppressWarnings("unchecked")
+    public T addParameter(OperationParameter param, String value) {
         parameters.put(param, value);
         return (T) this;
     }
 
-    public <T extends Operation> T addParameter(OperationParameter param) {
+    public T addParameter(OperationParameter param) {
         return addParameter(param, null);
     }
 
@@ -67,11 +66,11 @@ public abstract class Operation<T extends Operation> {
     }
 
     public enum OperationContext {
-        DATABASE, ENTITY, RECORD; // .. CONSTRAINT, INDEX etc
+        DATABASE, ENTITY, RECORD // .. CONSTRAINT, INDEX etc
     }
 
     public enum OperationParameter {
-        ENTIRE_RECORD;
+        ENTIRE_RECORD
     }
 
 

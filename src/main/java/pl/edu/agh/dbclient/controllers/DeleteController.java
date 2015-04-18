@@ -7,7 +7,6 @@ import pl.edu.agh.dbclient.WebAppConstants;
 import pl.edu.agh.dbclient.components.OperationService;
 import pl.edu.agh.dbclient.exceptions.DBClientException;
 import pl.edu.agh.dbclient.objects.QueryResult;
-import pl.edu.agh.dbclient.objects.operations.CreateOperation;
 import pl.edu.agh.dbclient.objects.operations.DeleteOperation;
 
 /**

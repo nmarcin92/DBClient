@@ -9,6 +9,7 @@ public class DBCredentials {
     private String url;
     private String databaseName;
 
+    @SuppressWarnings("unused")
     public DBCredentials() {
     }
 
