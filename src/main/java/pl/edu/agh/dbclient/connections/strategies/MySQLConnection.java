@@ -3,9 +3,6 @@ package pl.edu.agh.dbclient.connections.strategies;
 import org.apache.log4j.Logger;
 import pl.edu.agh.dbclient.utils.Configuration;
 
-/**
- * @author mnowak
- */
 public class MySQLConnection extends GenericSQLConnection {
 
     private static final Logger LOGGER = Logger.getLogger(MySQLConnection.class);
