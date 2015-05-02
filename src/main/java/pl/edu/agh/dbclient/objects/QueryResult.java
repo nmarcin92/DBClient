@@ -13,6 +13,13 @@ public class QueryResult {
     private List<String> errors;
     private boolean nextPage;
 
+    public static QueryResult createErrorResult(String errorMessage) {
+        QueryResult qr = new QueryResult();
+        qr.setSuccess(false);
+        qr.addError(errorMessage);
+        return qr;
+    }
+
     public QueryResult() {
         this.errors = new ArrayList<>();
         setSuccess(true);

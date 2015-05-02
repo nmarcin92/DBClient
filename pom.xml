@@ -7,10 +7,6 @@
     <version>1.0-SNAPSHOT</version>
     <name>DBClient</name>
 
-    <properties>
-        <spring.version>4.1.1.RELEASE</spring.version>
-    </properties>
-
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>

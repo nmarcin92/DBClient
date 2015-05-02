@@ -6,12 +6,13 @@ import pl.edu.agh.dbclient.utils.Configuration;
 /**
  * @author mnowak
  */
-public class PostgreSQLConnection extends GenericSQLConnection {
+public class MySQLConnection extends GenericSQLConnection {
 
-    private static final Logger LOGGER = Logger.getLogger(PostgreSQLConnection.class);
-    private static final int CONNECTION_TIMEOUT = Configuration.getInteger("postgres.timeout", 1000);
-    private static final String URL_PREFIX = "jdbc:postgresql://";
-    private static final String JDBC_DRIVER = "org.postgresql.Driver";
+    private static final Logger LOGGER = Logger.getLogger(MySQLConnection.class);
+    private static final int CONNECTION_TIMEOUT = Configuration.getInteger("mysql.timeout", 1000);
+    private static final String URL_PREFIX = "jdbc:mysql://";
+    private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+
 
     @Override
     protected int getConnectionTimeout() {
@@ -27,5 +28,4 @@ public class PostgreSQLConnection extends GenericSQLConnection {
     protected String getJdbcDriver() {
         return JDBC_DRIVER;
     }
-
 }

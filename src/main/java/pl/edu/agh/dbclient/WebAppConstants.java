@@ -13,10 +13,12 @@ public class WebAppConstants {
     public static final String COMMAND_RESOURCE_PATH = "/command";
 
     // Error messages
+    public static final String UNKNOWN_SERVER_ERROR = "Failed due to unknown server error. Contact with adminstators.";
     public static final String CONNECTION_INITIALIZATION_ERROR = "Connection initialization failed. Contact with administrators.";
     public static final String BAD_CREDENTIALS_ERROR = "Invalid username/password or database URL.";
-    public static final java.lang.String UNSUPPORTED_OPERATION_CONTEXT_ERROR = "Operation context is not supported.";
+    public static final String UNSUPPORTED_OPERATION_CONTEXT_ERROR = "Operation context is not supported.";
 
-    private WebAppConstants(){}
+    private WebAppConstants() {
+    }
 
 }
