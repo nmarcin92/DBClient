@@ -2,16 +2,101 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>Select</title>
+    <title>DB Client</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="tabs.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
     <script src="jquery-2.1.3.min.js"></script>
-    <script src="data.js"></script>
-    <script src="select.js" ></script>
+    <script src="common.js" ></script>
+    <script src="read.js" ></script>
+    <script src="tabs.js" ></script>
 </head>
-<body onload="loadData()">
-    <table id="result" border="1">
+<body ng-app="dbClient" ng-controller="dbClientController">
+    <div id="left-column">
+        <div class="container" id="connection-container">
+            <h2>Connection</h2>
+            <br>
+            <form>
+                <input type="text" ng-model="hostName" placeholder="Host" class="input-field"><br>
+                <input type="text" ng-model="port" placeholder="Port" class="input-field"><br>
+                <input type="text" ng-model="databaseName" placeholder="Database" class="input-field"><br>
+                <input type="text" ng-model="userName" placeholder="User" class="input-field"><br>
+                <input type="password" ng-model="password" placeholder="Password" class="input-field"><br>
+                <br>
+                <input type="submit" class="button-big" value="Connect"><br>
+            </form>
+        </div>
+    </div>
 
-    </table>
+    <div id="central-column">
+        <div class="tabs">
+            <ul class="tab-links">
+                <li class="active"><a href="#tab-create">Create</a></li>
+                <li><a href="#tab-read">Read</a></li>
+                <li><a href="#tab-update">Update</a></li>
+                <li><a href="#tab-delete">Delete</a></li>
+                <li><a href="#tab-query">Query</a></li>
+            </ul>
 
-    <span id="rows-cnt"></span>
+            <div class="tab-content">
+                <div id="tab-create" class="tab active">
+                    Create
+                </div>
+
+                <div id="tab-read" class="tab">
+                    <form>
+                        <table border="0">
+                            <tr>
+                                <td><input ng-model="tableName" type="text" class="input-field" placeholder="Table"></td>
+                                <td><input type="text" class="input-field" placeholder="Columns"></td>
+                                <td><input type="text" class="input-field" placeholder="Order by"></td>
+                                <td><button class="button" ng-click="performRead()">Send</button></td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+
+                <div id="tab-update" class="tab">
+                    Update
+                </div>
+
+                <div id="tab-delete" class="tab">
+                    Delete
+                </div>
+
+                <div id="tab-query" class="tab">
+                    Query
+                </div>
+            </div>
+        </div>
+        <div class="response-container">
+            <h2>Response</h2>
+            <br>
+
+            <table border="1">
+                <tr>
+                    <th ng-repeat="attribute in attributes">
+                        {{attribute.attributeName}}
+                    </th>
+                </tr>
+
+                <tr ng-repeat="row in rows" ng-class-even="'even'" ng-class-odd="'odd'">
+                    <td ng-repeat="value in row.attributes">
+                        {{value}}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div id="right-column">
+        <div class="container" id="history-container">
+            <h2>History</h2>
+            <br>
+            <div class="content" id="history-content">
+                None
+            </div>
+        </div>
+    </div>
 </body>
 </html>

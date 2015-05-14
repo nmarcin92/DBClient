@@ -1,0 +1,148 @@
+html {
+    height: 100%;
+}
+body{
+    padding:0 0;
+    margin:0 0;
+    height: 100%;
+
+    background: linear-gradient(45deg, white 25%,
+    #dcdcdc 25%, #dcdcdc 50%,
+    white 50%, white 75%,
+    #dcdcdc 75%);
+    background-size:6px 6px;
+}
+
+#left-column{
+    float:left;
+    width:20%;
+    height: 100%;
+}
+
+#central-column{
+    float:left;
+    width:60%;
+    height: 100%;
+}
+
+#right-column{
+    float:left;
+    width:20%;
+    height: 100%;
+}
+
+.container {
+    border-radius: 10px;
+    border-width: 3px;
+    border-color: #a20410;
+    border-style: solid;
+    background: #FF4800;
+    padding: 5px;
+    margin: 10px;
+    opacity: 0.9;
+    filter: alpha(opacity=90);
+}
+
+.response-container {
+    border-radius: 10px;
+    border-width: 3px;
+    border-color: #a20410;
+    border-style: solid;
+    background: #FF4800;
+    padding: 5px;
+    margin: 10px;
+    opacity: 0.7;
+    filter: alpha(opacity=70);
+    height: calc(65% - 25px);
+}
+
+.content{
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: black;
+    border-style: solid;
+    background: #fff6ef;
+    padding: 15px;
+}
+
+#connection-container{
+    height: calc(100% - 50px);
+}
+
+#history-container{
+    height: calc(100% - 50px);
+}
+
+#history-content{
+    height: calc(100% - 90px);
+}
+
+h2{
+    color:white;
+    height: 20px;
+    margin: 10px;
+}
+
+.input-field{
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: black;
+    border-style: solid;
+    background: #fff6ef;
+    padding: 5px;
+    margin: 3px;
+    width: calc(100% - 20px);
+}
+
+.button{
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: black;
+    border-style: solid;
+    background: #ebe3dc;
+    padding: 5px;
+    margin: 3px;
+    width: 100%;
+}
+
+.button-big {
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: black;
+    border-style: solid;
+    background: #ebe3dc;
+    padding: 10px;
+    margin: 3px;
+    font-weight: 800;
+    width: calc(100% - 10px);
+}
+
+table {
+    opacity: 1;
+    filter: alpha(opacity=100);
+    border-collapse: collapse;
+}
+
+tr{
+    margin: 0px;
+    padding: 0px;
+}
+
+th{
+    background: #6c000f;
+    color: white;
+    padding: 5px;
+}
+
+td{
+    color: white;
+    padding: 5px;
+}
+
+.even {
+    background: #ff000a;
+}
+
+.odd{
+    background: #d30007;
+}
