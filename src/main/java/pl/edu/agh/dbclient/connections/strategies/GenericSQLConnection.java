@@ -1,6 +1,7 @@
 package pl.edu.agh.dbclient.connections.strategies;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
 import org.apache.log4j.Logger;
 import pl.edu.agh.dbclient.WebAppConstants;
 import pl.edu.agh.dbclient.connections.DBConnection;
@@ -20,6 +21,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * @author mnowak
@@ -143,8 +145,10 @@ public abstract class GenericSQLConnection implements DBConnection {
         QueryResult qr = new QueryResult();
         Entity entity = new Entity(operation.getEntityName());
 
+        List<String> parts = Splitter.on(".").splitToList(operation.getEntityName());
+        String tableNameStripped = parts.get(parts.size() - 1);
         StringBuilder queryBuilder = new StringBuilder("SELECT * FROM INFORMATION_SCHEMA.COLUMNS")
-                .append(" WHERE TABLE_NAME='").append(operation.getEntityName()).append("'");
+                .append(" WHERE TABLE_NAME='").append(tableNameStripped).append("'");
         try {
             ResultSet rs = conn.createStatement().executeQuery(queryBuilder.toString());
             while (rs.next()) {
