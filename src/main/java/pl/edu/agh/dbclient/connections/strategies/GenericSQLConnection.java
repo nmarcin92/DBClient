@@ -89,7 +89,6 @@ public abstract class GenericSQLConnection implements DBConnection {
 
     private QueryResult insertRow(CreateOperation operation) throws DatabaseException {
         QueryResult qr = new QueryResult();
-
         StringBuilder queryBuilder = new StringBuilder("INSERT INTO ")
                 .append(operation.getEntityName());
         if (!operation.hasParameter(Operation.OperationParameter.ENTIRE_RECORD)) {

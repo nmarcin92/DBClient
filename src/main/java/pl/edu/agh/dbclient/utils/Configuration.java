@@ -18,7 +18,8 @@ public class Configuration {
         BUNDLE = ResourceBundle.getBundle(PROP_FILENAME);
     }
 
-    private Configuration() {}
+    private Configuration() {
+    }
 
     public static String getString(String key) {
         return getString(key, null);
