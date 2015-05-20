@@ -1,13 +1,25 @@
 package pl.edu.agh.dbclient.objects.operations;
 
+import com.google.common.collect.Lists;
+
+import java.util.List;
+
 /**
  * @author mnowak
  */
 public class DeleteOperation extends Operation<DeleteOperation> {
 
-    public DeleteOperation() {}
+    private List<String> preconditions;
+
+    public DeleteOperation() {
+        preconditions = Lists.newArrayList();
+    }
 
     public DeleteOperation(OperationContext context, String entityName) {
         super(context, entityName);
+    }
+
+    public List<String> getPreconditions() {
+        return preconditions;
     }
 }

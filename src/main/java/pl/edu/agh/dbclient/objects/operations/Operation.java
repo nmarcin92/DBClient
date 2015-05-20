@@ -23,6 +23,10 @@ public abstract class Operation<T extends Operation<T>> {
         this.entityName = entityName;
     }
 
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
+    }
+
     public OperationContext getContext() {
         return context;
     }

@@ -19,7 +19,7 @@ public class HandlingController {
     public
     @ResponseBody
     QueryResult handleError(DBClientException exception) {
-        LOGGER.error("Unknown error", exception);
+        LOGGER.error("Error", exception);
         return QueryResult.createErrorResult(exception.getMessage());
     }
 

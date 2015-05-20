@@ -2,6 +2,7 @@ package pl.edu.agh.dbclient.connections;
 
 import org.apache.log4j.Logger;
 import pl.edu.agh.dbclient.WebAppConstants;
+import pl.edu.agh.dbclient.connections.strategies.MongoDBConnection;
 import pl.edu.agh.dbclient.connections.strategies.MySQLConnection;
 import pl.edu.agh.dbclient.connections.strategies.PostgreSQLConnection;
 import pl.edu.agh.dbclient.exceptions.ConnectionInitializationException;
@@ -23,6 +24,7 @@ public class DBConnectionFactory {
     static {
         CONNECTION_STRATEGIES.put(DBConnectionType.POSTGRESQL, PostgreSQLConnection.class);
         CONNECTION_STRATEGIES.put(DBConnectionType.MYSQL, MySQLConnection.class);
+        CONNECTION_STRATEGIES.put(DBConnectionType.MONGODB, MongoDBConnection.class);
     }
 
     public static DBConnection getOrCreateConnection(UserSession session) throws ConnectionInitializationException {
