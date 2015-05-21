@@ -53,7 +53,18 @@
 
             <div class="tab-content">
                 <div id="tab-create" class="tab active">
-                    Create
+                    <input ng-model="tableName" type="text" class="input-field" placeholder="Table" style="width: 25%">
+                    <br>
+                    <table border="0">
+                        <tr ng-repeat="createQueryAttribute in createQueryAttributes">
+                            <td><input ng-model="createQueryAttribute.name" type="text" class="input-field" placeholder="Attribute"></td>
+                            <td><input ng-model="createQueryAttribute.value" type="text" class="input-field" placeholder="Value"></td>
+                        </tr>
+                    </table>
+                    <br>
+                    <button class="button" ng-click="addCreateAttribute()" style="width: 5%" title="Add attribute">+</button>
+                    <button class="button" ng-click="removeCreateAttribute()" style="width: 5%" title="Remove attribute">-</button>
+                    <button ng-disabled="!connected" class="button" ng-click="performCreate()" style="width: 15%">Send</button>
                 </div>
 
                 <div id="tab-read" class="tab">
@@ -70,7 +81,19 @@
                 </div>
 
                 <div id="tab-update" class="tab">
-                    Update
+                    <input ng-model="tableName" type="text" class="input-field" placeholder="Table" style="width: 25%">
+                    <input ng-model="rowId" type="text" class="input-field" placeholder="Id" style="width: 25%">
+                    <br>
+                    <table border="0">
+                        <tr ng-repeat="updateQueryAttribute in updateQueryAttributes">
+                            <td><input ng-model="updateQueryAttribute.name" type="text" class="input-field" placeholder="Attribute"></td>
+                            <td><input ng-model="updateQueryAttribute.value" type="text" class="input-field" placeholder="Value"></td>
+                        </tr>
+                    </table>
+                    <br>
+                    <button class="button" ng-click="addUpdateAttribute()" style="width: 5%" title="Add attribute">+</button>
+                    <button class="button" ng-click="removeUpdateAttribute()" style="width: 5%" title="Remove attribute">-</button>
+                    <button ng-disabled="!connected" class="button" ng-click="performUpdate()" style="width: 15%">Send</button>
                 </div>
 
                 <div id="tab-delete" class="tab">
