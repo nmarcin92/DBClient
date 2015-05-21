@@ -235,7 +235,7 @@ public abstract class GenericSQLConnection implements DBConnection {
                     .append(')');
         }
         queryBuilder.append(" VALUES( ");
-        queryBuilder.append(Joiner.on(",").join(Collections.nCopies(operation.getAttributes().size(), "? ")));
+        queryBuilder.append(Joiner.on(",").join(Collections.nCopies(operation.getAttributes().size(), "? "))).append(" )");
 
         try {
             PreparedStatement statement = conn.prepareStatement(queryBuilder.toString());
@@ -244,9 +244,7 @@ public abstract class GenericSQLConnection implements DBConnection {
                 statement.setString(paramCount, operation.getAttributes().get(k));
                 ++paramCount;
             }
-
-            LOGGER.info("Executing SQL statement: " + queryBuilder.toString());
-            conn.createStatement().executeUpdate(queryBuilder.toString());
+            statement.execute();
         } catch (SQLException e) {
             LOGGER.error("Error while inserting row", e);
             throw new DatabaseException(e.getMessage());
@@ -284,6 +282,7 @@ public abstract class GenericSQLConnection implements DBConnection {
                 qr.getEntity().getRows().add(row);
             }
             return qr;
+
         } catch (SQLException e) {
             LOGGER.error("Error while reading records", e);
             throw new DatabaseException(e.getMessage());
