@@ -264,10 +264,12 @@ public abstract class GenericSQLConnection implements DBConnection {
 
         try {
             QueryResult qr = readTableSchema(operation);
-            Iterator<EntityAttribute> iterator = qr.getEntity().getAttributes().iterator();
-            while (iterator.hasNext()) {
-                if (!operation.getAttributeNames().contains(iterator.next().getAttributeName())) {
-                    iterator.remove();
+            if (!operation.hasParameter(Operation.OperationParameter.ENTIRE_RECORD)) {
+                Iterator<EntityAttribute> iterator = qr.getEntity().getAttributes().iterator();
+                while (iterator.hasNext()) {
+                    if (!operation.getAttributeNames().contains(iterator.next().getAttributeName())) {
+                        iterator.remove();
+                    }
                 }
             }
 
