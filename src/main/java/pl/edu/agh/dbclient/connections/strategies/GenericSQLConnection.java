@@ -167,7 +167,7 @@ public abstract class GenericSQLConnection implements DBConnection {
 
     private QueryResult deleteRows(DeleteOperation operation) throws DBClientException {
         QueryResult qr = new QueryResult();
-        StringBuilder queryBuilder = new StringBuilder("DELETE FROM ");
+        StringBuilder queryBuilder = new StringBuilder("DELETE FROM ").append(operation.getEntityName());
         if (operation.getPreconditions().size() > 0) {
             queryBuilder.append(" WHERE ").append(Joiner.on(" AND ").join(operation.getPreconditions()));
         }
