@@ -118,9 +118,16 @@ h2{
 }
 
 table {
+    margin: 0px;
+    padding: 0px;
     opacity: 1;
     filter: alpha(opacity=100);
     border-collapse: collapse;
+}
+
+tbody{
+    margin: 0px;
+    padding: 0px;
 }
 
 tr{
@@ -135,6 +142,8 @@ th{
 }
 
 td{
+    margin: 0px;
+    padding: 0px;
     color: white;
     padding: 5px;
 }
@@ -145,4 +154,23 @@ td{
 
 .odd{
     background: #d30007;
+}
+
+
+.historyList{
+    height: 60%;
+    overflow:hidden;
+    overflow-y:scroll;
+}
+
+.successFulHistoryItem {
+    margin: 0px;
+    padding: 0px;
+    color: #8afc2b;
+}
+
+.unsuccessFulHistoryItem {
+    margin: 0px;
+    padding: 0px;
+    color: #fc6d76;
 }
