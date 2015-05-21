@@ -171,6 +171,9 @@ public abstract class GenericSQLConnection implements DBConnection {
         if (operation.getPreconditions().size() > 0) {
             queryBuilder.append(" WHERE ").append(Joiner.on(" AND ").join(operation.getPreconditions()));
         }
+
+        LOGGER.info("#####" + qr.toString());
+
         try {
             conn.createStatement().execute(qr.toString());
         } catch (SQLException e) {
