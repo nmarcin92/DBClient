@@ -12,11 +12,12 @@ public class DeleteOperation extends Operation<DeleteOperation> {
     private List<String> preconditions;
 
     public DeleteOperation() {
-        preconditions = Lists.newArrayList();
+
     }
 
     public DeleteOperation(OperationContext context, String entityName) {
         super(context, entityName);
+        preconditions = Lists.newArrayList();
     }
 
     public List<String> getPreconditions() {

@@ -19,10 +19,7 @@ import pl.edu.agh.dbclient.objects.operations.*;
 import pl.edu.agh.dbclient.utils.Utils;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author mnowak
@@ -269,6 +266,12 @@ public abstract class GenericSQLConnection implements DBConnection {
 
         try {
             QueryResult qr = readTableSchema(operation);
+            Iterator<EntityAttribute> iterator = qr.getEntity().getAttributes().iterator();
+            while (iterator.hasNext()) {
+                if (!operation.getAttributeNames().contains(iterator.next().getAttributeName())) {
+                    iterator.remove();
+                }
+            }
 
             ResultSet rs = conn.createStatement().executeQuery(queryBuilder.toString());
             while (rs.next()) {

@@ -45,4 +45,12 @@ public class UpdateOperation extends Operation<UpdateOperation> {
     public String getId() {
         return id;
     }
+
+    public void setUpdated(EntityRow updated) {
+        this.updated = updated;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }
