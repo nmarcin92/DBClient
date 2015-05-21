@@ -35,7 +35,7 @@ function performRead($scope, $http){
                     //pass attributes names
                     $scope.attributes = data.entity.attributes;
                     $scope.rows = data.entity.rows;
-                    console.log($scope.rows);
+
                     $scope.history[$scope.history.length] = new historyItem("Read", true);
                 } else {
                     $scope.history[$scope.history.length] = new historyItem("Read", false);
@@ -45,6 +45,6 @@ function performRead($scope, $http){
             }).
             error(function(data, status, headers, config) {
                 alert("error")
-                $scope.history[$scope.history.length] = new historyItem("Query", false);
+                $scope.history[$scope.history.length] = new historyItem("Read", false);
             });
 }
