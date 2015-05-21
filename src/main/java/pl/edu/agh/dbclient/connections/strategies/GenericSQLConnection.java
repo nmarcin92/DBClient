@@ -172,10 +172,8 @@ public abstract class GenericSQLConnection implements DBConnection {
             queryBuilder.append(" WHERE ").append(Joiner.on(" AND ").join(operation.getPreconditions()));
         }
 
-        LOGGER.info("#####" + qr.toString());
-
         try {
-            conn.createStatement().execute(qr.toString());
+            conn.createStatement().execute(queryBuilder.toString());
         } catch (SQLException e) {
             LOGGER.error("Error while deleting row", e);
             throw new DatabaseException(e.getMessage());
