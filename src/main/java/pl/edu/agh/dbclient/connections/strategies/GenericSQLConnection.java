@@ -86,8 +86,7 @@ public abstract class GenericSQLConnection implements DBConnection {
 
     private QueryResult updateRows(UpdateOperation operation) throws DatabaseException {
         QueryResult qr = new QueryResult();
-        StringBuilder queryBuilder = new StringBuilder("UPDATE ").append(operation.getEntityName()).append(" (");
-        queryBuilder.append(" ) SET ");
+        StringBuilder queryBuilder = new StringBuilder("UPDATE ").append(operation.getEntityName()).append(" SET ");
         queryBuilder.append(Joiner.on(", ").join(Collections2.transform(operation.getUpdated().getAttributes().entrySet(), new Function<Map.Entry, String>() {
             @Override
             public String apply(Map.Entry input) {
