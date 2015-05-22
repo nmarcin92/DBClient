@@ -11,14 +11,14 @@ function performUpdate($scope, $http){
     var data = {
         "parameters": {},
         "context": "RECORD",
-        "entityName": "nowa_tabela",
+        "entityName": $scope.tableName,
         "userSession": {
-            "connectionType": "POSTGRESQL",
+            "connectionType": $scope.databaseType,
             "dbCredentials": {
-                "username": "postgres",
-                "password": "postgres",
-                "url": "localhost:5432",
-                "databaseName": "postgres"
+                "username": $scope.userName,
+                "password": $scope.password,
+                "url": $scope.hostName + ":" + $scope.port,
+                "databaseName": $scope.databaseName
             }
         },
         "toAdd": [],
