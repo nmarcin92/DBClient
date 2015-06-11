@@ -329,6 +329,7 @@ public abstract class GenericSQLConnection implements DBConnection {
                 }
                 qr.getEntity().getRows().add(row);
             }
+
             return qr;
 
         } catch (SQLException e) {

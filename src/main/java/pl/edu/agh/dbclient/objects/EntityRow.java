@@ -1,6 +1,7 @@
 package pl.edu.agh.dbclient.objects;
 
-import java.util.HashMap;
+import com.google.common.collect.Maps;
+
 import java.util.Map;
 
 /**
@@ -11,7 +12,7 @@ public class EntityRow {
     private Map<String, String> attributes;
 
     public EntityRow() {
-        this.attributes = new HashMap<>();
+        this.attributes = Maps.newLinkedHashMap();
     }
 
     public Map<String, String> getAttributes() {
