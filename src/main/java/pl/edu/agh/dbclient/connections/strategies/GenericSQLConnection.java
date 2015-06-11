@@ -170,6 +170,7 @@ public abstract class GenericSQLConnection implements DBConnection {
                             return "ALTER COLUMN " + input.getAttributeName() + " TYPE " + input.getDataType();
                         }
                     })));
+            first = false;
         }
 
         if (!Utils.isEmptyMap(operation.getToRename())) {
@@ -180,6 +181,7 @@ public abstract class GenericSQLConnection implements DBConnection {
                     return " RENAME COLUMN " + input + " TO " + operation.getToRename().get(input);
                 }
             })));
+            first = false;
         }
 
         try {
@@ -353,6 +355,8 @@ public abstract class GenericSQLConnection implements DBConnection {
                 String dataType = rs.getString("data_type");
                 if ("character varying".equals(dataType)) {
                     attribute.setDataType("varchar(" + length + ")");
+                } else if ("character".equals(dataType)) {
+                    attribute.setDataType("char(" + length + ")");
                 } else {
                     attribute.setDataType(dataType);
                 }
