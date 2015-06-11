@@ -78,7 +78,7 @@ function deleteEnityAttribute($scope, $http, attributeName){
     var data = {
         "parameters": {},
         "context": "ENTITY",
-        "entityName": $scope.tableName,
+        "entityName": $scope.schemaTableName,
         "userSession": {
             "connectionType": $scope.databaseType,
             "dbCredentials": {
@@ -168,6 +168,7 @@ function updateEntityAttribute($scope, $http, attributeName){
 
 //getting list of all tables
 function getEntities($scope, $http){
+    if(!$scope.connected) return;
     var data = {
         "parameters": {},
         "context": "DATABASE",
@@ -198,3 +199,72 @@ function getEntities($scope, $http){
         });
 }
 
+//create a new table
+function createEntity($scope, $http){
+    var data = {
+        "parameters": {},
+        "context": "ENTITY",
+        "entityName": $scope.newEntityName,
+        "userSession": {
+            "connectionType": $scope.databaseType,
+            "dbCredentials": {
+                "username": $scope.userName,
+                "password": $scope.password,
+                "url": $scope.hostName + ":" + $scope.port,
+                "databaseName": $scope.databaseName
+            }
+        },
+        "attributes": {}
+    };
+
+    $http.post(serverUrl + "/create", data).
+        success(function(data, status, headers, config) {
+            if(data.success){
+                alert("Created new entity: " + $scope.newEntityName)
+            } else {
+                alert("Server error");
+                console.log(data.errors)
+            }
+        }).
+        error(function(data, status, headers, config) {
+            alert("error")
+        });
+
+    getEntities($scope, $http);
+}
+
+
+//delete a table
+function deleteEntity($scope, $http){
+    var data = {
+        "parameters": {},
+        "context": "ENTITY",
+        "entityName": $scope.schemaTableName,
+        "userSession": {
+            "connectionType": $scope.databaseType,
+            "dbCredentials": {
+                "username": $scope.userName,
+                "password": $scope.password,
+                "url": $scope.hostName + ":" + $scope.port,
+                "databaseName": $scope.databaseName
+            }
+        },
+        "preconditions": []
+    };
+
+
+    $http.post(serverUrl + "/delete", data).
+        success(function(data, status, headers, config) {
+            if(data.success){
+                alert("Deleted entity: " + $scope.schemaTableName)
+            } else {
+                alert("Server error");
+                console.log(data.errors)
+            }
+        }).
+        error(function(data, status, headers, config) {
+            alert("error")
+        });
+
+    getEntities($scope, $http);
+}
