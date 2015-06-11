@@ -136,7 +136,7 @@ public abstract class GenericSQLConnection implements DBConnection {
         return qr;
     }
 
-    private QueryResult updateTable(UpdateOperation operation) throws DatabaseException {
+    private QueryResult updateTable(final UpdateOperation operation) throws DatabaseException {
         QueryResult qr = new QueryResult();
         boolean first = true;
         StringBuilder queryBuilder = new StringBuilder("ALTER TABLE ").append(operation.getEntityName()).append(" ");
@@ -170,6 +170,16 @@ public abstract class GenericSQLConnection implements DBConnection {
                             return "ALTER COLUMN " + input.getAttributeName() + " TYPE " + input.getDataType();
                         }
                     })));
+        }
+
+        if (!Utils.isEmptyMap(operation.getToRename())) {
+            queryBuilder.append(first ? " " : ", ");
+            queryBuilder.append(Joiner.on(",").join(Collections2.transform(operation.getToRename().keySet(), new Function<String, String>() {
+                @Override
+                public String apply(String input) {
+                    return " RENAME COLUMN " + input + " TO " + operation.getToRename().get(input);
+                }
+            })));
         }
 
         try {
