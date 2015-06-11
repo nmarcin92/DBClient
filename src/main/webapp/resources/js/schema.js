@@ -169,6 +169,7 @@ function updateEntityAttribute($scope, $http, attributeName){
 //getting list of all tables
 function getEntities($scope, $http){
     if(!$scope.connected) return;
+    if($scope.databaseType == "MONGODB") return;
     var data = {
         "parameters": {},
         "context": "DATABASE",

@@ -15,3 +15,10 @@ app.controller('dbClientController', function($scope, $httpProvider) {
     $httpProvider.defaults.headers.common["Accept"] = "application/json";
     $httpProvider.defaults.headers.common["Content-Type"] = "application/json";
 });
+
+app.filter('prettyJSON', function () {
+    function syntaxHighlight(json) {
+        return JSON ? JSON.stringify(json, null, '  ') : 'your browser doesnt support JSON so cant pretty print';
+    }
+    return syntaxHighlight;
+});

@@ -155,6 +155,11 @@ label {
     padding: 2px;
 }
 
+code {
+    color: white;
+    font-family: monospace;
+}
+
 .even {
     background: #ff000a;
 }

@@ -134,7 +134,15 @@
                 <h2>Response</h2>
                 <br>
 
-                <table border="1">
+                <div ng-show="mongoOutput">
+                    <code ng-repeat="doc in documents" ng-class-even="'even'" ng-class-odd="'odd'">
+                        <pre>{{doc}}</pre>
+                        <br>
+                        <br>
+                    </code>
+                </div>
+
+                <table ng-hide="mongoOutput" border="1">
                     <tr>
                         <th ng-repeat="attribute in attributes">
                             {{attribute.attributeName}}
