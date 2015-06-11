@@ -25,4 +25,35 @@ app.controller('dbClientController', function($scope, $http) {
 
     //query
     $scope.runQuery = function() {runQuery($scope, $http)};
+
+    //schema display
+    $scope.displaySchema = false;
+    $scope.setDisplaySchema = function(displaySchema) {$scope.displaySchema = displaySchema };
+
+    //schema
+    $scope.displayTable = function() {displayTable($scope, $http)};
+    $scope.addEnityAttribute = function(newAttributeName, newAttributeType) {
+        $scope.newAttributeName = newAttributeName;
+        $scope.newAttributeType = newAttributeType;
+        addEnityAttribute($scope, $http)
+    };
+    $scope.deleteEnityAttribute = function (attributeName) {deleteEnityAttribute($scope, $http, attributeName)};
+
+    $scope.startAttributeUpdate = function(attributeName, dataType){
+        $scope.updatedAttributeName = attributeName;
+        $scope.newUpdatedAttributeName = attributeName;
+        $scope.newUpdatedAttributeType = dataType;
+    };
+
+    $scope.cancelAttributeUpdate = function(attributeName){
+        $scope.updatedAttributeName = undefined;
+    };
+
+    $scope.updateEntityAttribute = function(attributeName, newUpdatedAttributeName, newUpdatedAttributeType){
+        $scope.newUpdatedAttributeName = newUpdatedAttributeName;
+        $scope.newUpdatedAttributeType = newUpdatedAttributeType;
+        updateEntityAttribute($scope, $http, attributeName);
+    };
+
+    $scope.getEntities = function(){getEntities($scope, $http)};
 });

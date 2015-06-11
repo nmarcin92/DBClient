@@ -147,6 +147,13 @@ td{
     color: white;
     padding: 5px;
 }
+label {
+    color: white;
+    float: right;
+    border: 1px solid white;
+    margin-top: 5px;
+    padding: 2px;
+}
 
 .even {
     background: #ff000a;

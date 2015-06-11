@@ -15,36 +15,36 @@ function performRead($scope, $http){
             "attributeNames": []
         };
 
-        //add column names
-        if($scope.columnNames == "" || $scope.columnNames == undefined){
-            data.parameters.ENTIRE_RECORD = null;
-        }
-        else {
-            var columns = $scope.columnNames.split(",");
+    //add column names
+    if($scope.columnNames == "" || $scope.columnNames == undefined){
+        data.parameters.ENTIRE_RECORD = null;
+    }
+    else {
+        var columns = $scope.columnNames.split(",");
 
-            for(var i = 0; i < columns.length; i++){
-                columns[i] = columns[i].trim();
-            }
-
-            data.attributeNames = columns;
+        for(var i = 0; i < columns.length; i++){
+            columns[i] = columns[i].trim();
         }
 
-        $http.post(serverUrl + "/read", data).
-            success(function(data, status, headers, config) {
-                if(data.success){
-                    //pass attributes names
-                    $scope.attributes = data.entity.attributes;
-                    $scope.rows = data.entity.rows;
+        data.attributeNames = columns;
+    }
 
-                    $scope.history[$scope.history.length] = new historyItem("Read", true);
-                } else {
-                    $scope.history[$scope.history.length] = new historyItem("Read", false);
-                    alert("Server error");
-                    console.log(data.errors)
-                }
-            }).
-            error(function(data, status, headers, config) {
-                alert("error")
+    $http.post(serverUrl + "/read", data).
+        success(function(data, status, headers, config) {
+            if(data.success){
+                //pass attributes names
+                $scope.attributes = data.entity.attributes;
+                $scope.rows = data.entity.rows;
+
+                $scope.history[$scope.history.length] = new historyItem("Read", true);
+            } else {
                 $scope.history[$scope.history.length] = new historyItem("Read", false);
-            });
+                alert("Server error");
+                console.log(data.errors)
+            }
+        }).
+        error(function(data, status, headers, config) {
+            alert("error")
+            $scope.history[$scope.history.length] = new historyItem("Read", false);
+        });
 }
