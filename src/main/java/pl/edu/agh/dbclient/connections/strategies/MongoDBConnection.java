@@ -145,13 +145,35 @@ public class MongoDBConnection implements DBConnection {
         }
     }
 
-    private QueryResult updateDocument(UpdateOperation operation) {
+    private QueryResult updateDocument(UpdateOperation operation) throws DBClientException {
         DBCollection col = db.getCollection(operation.getEntityName());
-        BasicDBObject searchQuery = new BasicDBObject().append("id", operation.getId());
         BasicDBObject updated = new BasicDBObject();
         for (Map.Entry<String, String> entry : operation.getUpdated().getAttributes().entrySet()) {
             updated.append(entry.getKey(), entry.getValue());
         }
+
+
+        DBObject searchQuery = new BasicDBObject();
+        List<String> parts;
+        List<BasicDBObject> subqueries = Lists.newArrayList();
+        for (String prec : operation.getPreconditions()) {
+            if (prec.contains("=")) {
+                parts = Splitter.on("=").splitToList(prec);
+                subqueries.add(new BasicDBObject(parts.get(0), new BasicDBObject("$eq", parts.get(1))));
+            } else if (prec.contains("<")) {
+                parts = Splitter.on("<").splitToList(prec);
+                subqueries.add(new BasicDBObject(parts.get(0), new BasicDBObject("$lt", parts.get(1))));
+            } else if (prec.contains(">")) {
+                parts = Splitter.on(">").splitToList(prec);
+                subqueries.add(new BasicDBObject(parts.get(0), new BasicDBObject("$gt", parts.get(1))));
+            } else if (prec.contains("<>")) {
+                parts = Splitter.on("<>").splitToList(prec);
+                subqueries.add(new BasicDBObject(parts.get(0), new BasicDBObject("$ne", parts.get(1))));
+            } else {
+                throw new DBClientException("Unsupported precondition");
+            }
+        }
+        searchQuery.put("$and", subqueries);
 
         col.update(searchQuery, new BasicDBObject().append("$set", updated));
         return new QueryResult();
