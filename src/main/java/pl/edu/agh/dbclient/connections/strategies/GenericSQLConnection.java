@@ -173,12 +173,12 @@ public abstract class GenericSQLConnection implements DBConnection {
             first = false;
         }
 
-        if (!Utils.isEmptyMap(operation.getToRename())) {
+        if (!Utils.isEmptyCollection(operation.getToRename())) {
             queryBuilder.append(first ? " " : ", ");
-            queryBuilder.append(Joiner.on(",").join(Collections2.transform(operation.getToRename().keySet(), new Function<String, String>() {
+            queryBuilder.append(Joiner.on(",").join(Collections2.transform(operation.getToRename(), new Function<AttributeRename, String>() {
                 @Override
-                public String apply(String input) {
-                    return " RENAME COLUMN " + input + " TO " + operation.getToRename().get(input);
+                public String apply(AttributeRename input) {
+                    return " RENAME COLUMN " + input.getOldName() + " TO " + input.getNewName();
                 }
             })));
             first = false;
