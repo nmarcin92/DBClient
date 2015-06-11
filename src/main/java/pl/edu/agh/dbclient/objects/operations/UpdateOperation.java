@@ -16,7 +16,7 @@ public class UpdateOperation extends Operation<UpdateOperation> {
     private List<EntityAttribute> toModify = Lists.newArrayList();
     private List<AttributeRename> toRename = Lists.newArrayList();
 
-    private String id;
+    private List<String> preconditions;
     private EntityRow updated;
 
 
@@ -47,15 +47,15 @@ public class UpdateOperation extends Operation<UpdateOperation> {
         return updated;
     }
 
-    public String getId() {
-        return id;
+    public List<String> getPreconditions() {
+        return preconditions;
     }
 
     public void setUpdated(EntityRow updated) {
         this.updated = updated;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setPreconditions(List<String> preconditions) {
+        this.preconditions = preconditions;
     }
 }

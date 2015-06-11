@@ -125,7 +125,11 @@ public abstract class GenericSQLConnection implements DBConnection {
                         return input.getKey() + " = '" + input.getValue() + "'";
                     }
                 })));
-        queryBuilder.append(" WHERE id = '").append(operation.getId()).append("'");
+
+        if (operation.getPreconditions().size() > 0) {
+            queryBuilder.append(" WHERE ").append(Joiner.on(" AND ").join(operation.getPreconditions()));
+        }
+
         try {
             conn.createStatement().execute(queryBuilder.toString());
         } catch (SQLException e) {
