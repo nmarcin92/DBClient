@@ -24,7 +24,7 @@ function performUpdate($scope, $http){
         "toAdd": [],
         "toDelete": [],
         "toModify": [],
-        "id": $scope.rowId,
+        "preconditions": [$scope.updatePreconditions],
         "updated": {
             "attributes": {}
         }
