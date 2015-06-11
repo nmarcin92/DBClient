@@ -18,4 +18,5 @@ public class EntityRow {
     public Map<String, String> getAttributes() {
         return attributes;
     }
+
 }

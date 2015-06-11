@@ -122,10 +122,10 @@ public abstract class GenericSQLConnection implements DBConnection {
                 Collections2.transform(operation.getUpdated().getAttributes().entrySet(), new Function<Map.Entry, String>() {
                     @Override
                     public String apply(Map.Entry input) {
-                        return input.getKey() + " = " + input.getValue();
+                        return input.getKey() + " = '" + input.getValue() + "'";
                     }
                 })));
-        queryBuilder.append(" WHERE id = ").append(operation.getId());
+        queryBuilder.append(" WHERE id = '").append(operation.getId()).append("'");
         try {
             conn.createStatement().execute(queryBuilder.toString());
         } catch (SQLException e) {
@@ -173,20 +173,23 @@ public abstract class GenericSQLConnection implements DBConnection {
             first = false;
         }
 
+        boolean renamed = false;
+        StringBuilder renameBuilder = new StringBuilder("ALTER TABLE ").append(operation.getEntityName()).append(" ");
         if (!Utils.isEmptyCollection(operation.getToRename())) {
-            queryBuilder.append(first ? " " : ", ");
-            queryBuilder.append(Joiner.on(",").join(Collections2.transform(operation.getToRename(), new Function<AttributeRename, String>() {
+            renameBuilder.append(Joiner.on(",").join(Collections2.transform(operation.getToRename(), new Function<AttributeRename, String>() {
                 @Override
                 public String apply(AttributeRename input) {
                     return " RENAME COLUMN " + input.getOldName() + " TO " + input.getNewName();
                 }
             })));
-            first = false;
+            renamed = true;
         }
 
         try {
             LOGGER.info(queryBuilder.toString());
+            LOGGER.info(renameBuilder.toString());
             conn.createStatement().execute(queryBuilder.toString());
+            conn.createStatement().execute(renameBuilder.toString());
         } catch (SQLException e) {
             LOGGER.error("Error while updating table", e);
             throw new DatabaseException(e.getMessage());
