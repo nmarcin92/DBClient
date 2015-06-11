@@ -135,7 +135,26 @@ public class MongoDBConnection implements DBConnection {
 
     @Override
     public QueryResult performUpdate(UpdateOperation operation) throws DBClientException {
-        return null;
+        initializeConnection();
+        switch (operation.getContext()) {
+            case RECORD:
+                return updateDocument(operation);
+            default:
+                LOGGER.error("Unsupported operation context: " + operation.getContext());
+                throw new DatabaseException(WebAppConstants.UNSUPPORTED_OPERATION_CONTEXT_ERROR);
+        }
+    }
+
+    private QueryResult updateDocument(UpdateOperation operation) {
+        DBCollection col = db.getCollection(operation.getEntityName());
+        BasicDBObject searchQuery = new BasicDBObject().append("id", operation.getId());
+        BasicDBObject updated = new BasicDBObject();
+        for (Map.Entry<String, String> entry : operation.getUpdated().getAttributes().entrySet()) {
+            updated.append(entry.getKey(), entry.getValue());
+        }
+
+        col.update(searchQuery, new BasicDBObject().append("$set", updated));
+        return new QueryResult();
     }
 
     @Override
