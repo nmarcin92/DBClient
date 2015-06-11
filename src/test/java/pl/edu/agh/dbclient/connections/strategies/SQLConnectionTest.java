@@ -25,6 +25,8 @@ import pl.edu.agh.dbclient.objects.operations.Operation;
 import pl.edu.agh.dbclient.objects.operations.ReadOperation;
 import pl.edu.agh.dbclient.objects.operations.UpdateOperation;
 
+import java.util.Arrays;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -87,7 +89,7 @@ public class SQLConnectionTest {
     public void testUpdate() throws Exception {
         UpdateOperation op = new UpdateOperation(Operation.OperationContext.RECORD, "clients");
         op.setUserSession(userSession);
-        op.setId("123");
+        op.setPreconditions(Arrays.asList("id='123'"));
         EntityRow row = new EntityRow();
         row.getAttributes().put("name", "Rob");
         op.setUpdated(row);
