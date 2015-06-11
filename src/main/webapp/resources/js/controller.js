@@ -56,4 +56,8 @@ app.controller('dbClientController', function($scope, $http) {
     };
 
     $scope.getEntities = function(){getEntities($scope, $http)};
+    $scope.createEntity = function(){createEntity($scope, $http)};
+    $scope.deleteEntity = function(){deleteEntity($scope, $http)};
+
+
 });

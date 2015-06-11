@@ -3,246 +3,208 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>DB Client</title>
-    <link rel="stylesheet" type="text/css" href="resources/css/styles.css">
-    <link rel="stylesheet" type="text/css" href="resources/css/tabs.css">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <link rel="stylesheet" type="text/css" href="css/tabs.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
-    <script src="resources/js/connection.js"></script>
-    <script src="resources/js/jquery-2.1.3.min.js"></script>
-    <script src="resources/js/tabs.js"></script>
-    <script src="resources/js/common.js"></script>
-    <script src="resources/js/history.js"></script>
-    <script src="resources/js/create.js"></script>
-    <script src="resources/js/read.js"></script>
-    <script src="resources/js/update.js"></script>
-    <script src="resources/js/delete.js"></script>
-    <script src="resources/js/query.js"></script>
-    <script src="resources/js/schema.js"></script>
-    <script src="resources/js/controller.js"></script>
+    <script src="js/connection.js" ></script>
+    <script src="js/jquery-2.1.3.min.js"></script>
+    <script src="js/tabs.js" ></script>
+    <script src="js/common.js" ></script>
+    <script src="js/history.js"></script>
+    <script src="js/create.js"></script>
+    <script src="js/read.js" ></script>
+    <script src="js/update.js"></script>
+    <script src="js/delete.js"></script>
+    <script src="js/query.js"></script>
+    <script src="js/schema.js"></script>
+    <script src="js/controller.js"></script>
 </head>
 <body ng-app="dbClient" ng-controller="dbClientController">
-<div id="left-column">
-    <div class="container" id="connection-container">
-        <h2>Connection</h2>
-        <br>
-
-        <form>
-            <input ng-disabled="connected" type="text" ng-model="hostName" placeholder="Host" class="input-field"><br>
-            <input ng-disabled="connected" type="text" ng-model="port" placeholder="Port" class="input-field"><br>
-            <input ng-disabled="connected" type="text" ng-model="databaseName" placeholder="Database"
-                   class="input-field"><br>
-            <input ng-disabled="connected" type="text" ng-model="userName" placeholder="User" class="input-field"><br>
-            <input ng-disabled="connected" type="password" ng-model="password" placeholder="Password"
-                   class="input-field"><br>
-            <select ng-disabled="connected" ng-model="databaseType" class="input-field">
-                <option value="" disabled selected>Database type</option>
-                <option value="POSTGRESQL">Postgres SQL</option>
-                <option value="MYSQL">MySQL</option>
-                <option value="MONGODB">MongoDB</option>
-            </select>
+    <div id="left-column">
+        <div class="container" id="connection-container">
+            <h2>Connection</h2>
             <br>
-            <button type="submit" class="button-big" ng-click="setConnection()"><span
-                    ng-if="!connected">Connect</span><span ng-if="connected">Disconnect</span></button>
-            <br>
-        </form>
+            <form>
+                <input ng-disabled="connected" type="text" ng-model="hostName" placeholder="Host" class="input-field"><br>
+                <input ng-disabled="connected" type="text" ng-model="port" placeholder="Port" class="input-field"><br>
+                <input ng-disabled="connected" type="text" ng-model="databaseName" placeholder="Database" class="input-field"><br>
+                <input ng-disabled="connected" type="text" ng-model="userName" placeholder="User" class="input-field"><br>
+                <input ng-disabled="connected" type="password" ng-model="password" placeholder="Password" class="input-field"><br>
+                <select ng-disabled="connected" ng-model="databaseType" class="input-field">
+                    <option value="" disabled selected>Database type</option>
+                    <option value="POSTGRESQL">Postgres SQL</option>
+                    <option value="MYSQL">MySQL</option>
+                    <option value="MONGODB">MongoDB</option>
+                </select>
+                <br>
+                <button type="submit" class="button-big" ng-click="setConnection()"><span ng-if="!connected">Connect</span><span ng-if="connected">Disconnect</span></button><br>
+            </form>
+        </div>
     </div>
-</div>
 
-<div id="central-column">
-    <div class="tabs">
-        <ul class="tab-links">
-            <li class="active"><a ng-click="setDisplaySchema(false)" href="#tab-create">Create</a></li>
-            <li><a ng-click="setDisplaySchema(false)" href="#tab-read">Read</a></li>
-            <li><a ng-click="setDisplaySchema(false)" href="#tab-update">Update</a></li>
-            <li><a ng-click="setDisplaySchema(false)" href="#tab-delete">Delete</a></li>
-            <li><a ng-click="setDisplaySchema(false)" href="#tab-query">Query</a></li>
-            <li><a ng-click="setDisplaySchema(true)" href="#tab-schema">Schema</a></li>
-        </ul>
+    <div id="central-column">
+        <div class="tabs">
+            <ul class="tab-links">
+                <li class="active"><a ng-click="setDisplaySchema(false)" href="#tab-create">Create</a></li>
+                <li><a ng-click="setDisplaySchema(false)" href="#tab-read">Read</a></li>
+                <li><a ng-click="setDisplaySchema(false)" href="#tab-update">Update</a></li>
+                <li><a ng-click="setDisplaySchema(false)" href="#tab-delete">Delete</a></li>
+                <li><a ng-click="setDisplaySchema(false)" href="#tab-query">Query</a></li>
+                <li><a ng-click="setDisplaySchema(true)" href="#tab-schema">Schema</a></li>
+            </ul>
 
-        <div class="tab-content">
-            <div id="tab-create" class="tab active">
-                <input ng-model="tableName" type="text" class="input-field" placeholder="Table" style="width: 25%">
-                <br>
-                <table border="0">
-                    <tr ng-repeat="createQueryAttribute in createQueryAttributes">
-                        <td><input ng-model="createQueryAttribute.name" type="text" class="input-field"
-                                   placeholder="Attribute"></td>
-                        <td><input ng-model="createQueryAttribute.value" type="text" class="input-field"
-                                   placeholder="Value"></td>
-                    </tr>
-                </table>
-                <br>
-                <button class="button" ng-click="addCreateAttribute()" style="width: 5%" title="Add attribute">+
-                </button>
-                <button class="button" ng-click="removeCreateAttribute()" style="width: 5%" title="Remove attribute">-
-                </button>
-                <button ng-disabled="!connected" class="button" ng-click="performCreate()" style="width: 15%">Send
-                </button>
-            </div>
-
-            <div id="tab-read" class="tab">
-                <form>
+            <div class="tab-content">
+                <div id="tab-create" class="tab active">
+                    <input ng-model="tableName" type="text" class="input-field" placeholder="Table" style="width: 25%">
+                    <br>
                     <table border="0">
-                        <tr>
-                            <td><input ng-model="tableName" type="text" class="input-field" placeholder="Table"></td>
-                            <td><input ng-model="columnNames" type="text" class="input-field" placeholder="Columns">
-                            </td>
-                            <td><input type="text" class="input-field" placeholder="Order by"></td>
-                            <td>
-                                <button ng-disabled="!connected" class="button" ng-click="performRead()">Send</button>
-                            </td>
+                        <tr ng-repeat="createQueryAttribute in createQueryAttributes">
+                            <td><input ng-model="createQueryAttribute.name" type="text" class="input-field" placeholder="Attribute"></td>
+                            <td><input ng-model="createQueryAttribute.value" type="text" class="input-field" placeholder="Value"></td>
                         </tr>
                     </table>
-                </form>
+                    <br>
+                    <button class="button" ng-click="addCreateAttribute()" style="width: 5%" title="Add attribute">+</button>
+                    <button class="button" ng-click="removeCreateAttribute()" style="width: 5%" title="Remove attribute">-</button>
+                    <button ng-disabled="!connected" class="button" ng-click="performCreate()" style="width: 15%">Send</button>
+                </div>
+
+                <div id="tab-read" class="tab">
+                    <form>
+                        <table border="0">
+                            <tr>
+                                <td><input ng-model="tableName" type="text" class="input-field" placeholder="Table"></td>
+                                <td><input ng-model="columnNames" type="text" class="input-field" placeholder="Columns"></td>
+                                <td><input type="text" class="input-field" placeholder="Order by"></td>
+                                <td><button ng-disabled="!connected" class="button" ng-click="performRead()">Send</button></td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+
+                <div id="tab-update" class="tab">
+                    <input ng-model="tableName" type="text" class="input-field" placeholder="Table" style="width: 25%">
+                    <input ng-model="rowId" type="text" class="input-field" placeholder="Id" style="width: 25%">
+                    <br>
+                    <table border="0">
+                        <tr ng-repeat="updateQueryAttribute in updateQueryAttributes">
+                            <td><input ng-model="updateQueryAttribute.name" type="text" class="input-field" placeholder="Attribute"></td>
+                            <td><input ng-model="updateQueryAttribute.value" type="text" class="input-field" placeholder="Value"></td>
+                        </tr>
+                    </table>
+                    <br>
+                    <button class="button" ng-click="addUpdateAttribute()" style="width: 5%" title="Add attribute">+</button>
+                    <button class="button" ng-click="removeUpdateAttribute()" style="width: 5%" title="Remove attribute">-</button>
+                    <button ng-disabled="!connected" class="button" ng-click="performUpdate()" style="width: 15%">Send</button>
+                </div>
+
+                <div id="tab-delete" class="tab">
+                    <form>
+                        <input ng-model="tableName" type="text" class="input-field" placeholder="Table" style="width: 20%">
+                        <input ng-model="deletePreconditions" type="text" class="input-field" placeholder="Preconditions" style="width: 60%">
+                        <button ng-disabled="!connected" class="button" ng-click="performDelete()" style="width: 10%">Send</button>
+                    </form>
+                </div>
+
+                <div id="tab-query" class="tab">
+                    <form>
+                        <input ng-model="query" type="text" class="input-field" placeholder="Query" style="width: 60%">
+                        <select ng-model="hasResult" class="input-field" style="width: 20%">
+                            <option value="" disabled selected>Response type</option>
+                            <option value="false">Notification</option>
+                            <option value="true">Table records</option>
+                        </select>
+                        <button ng-disabled="!connected" class="button" ng-click="runQuery()" style="width: 10%">Run</button>
+                    </form>
+                </div>
+
+                <div id="tab-schema" class="tab">
+                    <select ng-change="displayTable()" ng-init="getEntities()" ng-model="schemaTableName" class="input-field" style="width: 25%">
+                        <option value="" disabled selected>Select entity to display</option>
+                        <option ng-repeat="entity in entities">{{entity.attributeName}}</option>
+                    </select>
+                    <input ng-model="newEntityName" type="text" class="input-field" placeholder="New entity name" style="width: 20%">
+                    <button class="button" ng-click="createEntity()" style="width: 15%" >Create</button>
+                    <label><input type="checkbox" ng-model="editSchema">Edit</label>
+                </div>
+            </div>
+        </div>
+        <div class="response-container">
+            <div ng-show="!displaySchema">
+                <h2>Response</h2>
+                <br>
+
+                <table border="1">
+                    <tr>
+                        <th ng-repeat="attribute in attributes">
+                            {{attribute.attributeName}}
+                        </th>
+                    </tr>
+
+                    <tr ng-repeat="row in rows" ng-class-even="'even'" ng-class-odd="'odd'">
+                        <td ng-repeat="value in row.attributes">
+                            {{value}}
+                        </td>
+                    </tr>
+                </table>
             </div>
 
-            <div id="tab-update" class="tab">
-                <input ng-model="tableName" type="text" class="input-field" placeholder="Table" style="width: 25%">
-                <input ng-model="rowId" type="text" class="input-field" placeholder="Id" style="width: 25%">
+            <div ng-show="displaySchema">
+                <h2>Schema</h2>
                 <br>
-                <table border="0">
-                    <tr ng-repeat="updateQueryAttribute in updateQueryAttributes">
-                        <td><input ng-model="updateQueryAttribute.name" type="text" class="input-field"
-                                   placeholder="Attribute"></td>
-                        <td><input ng-model="updateQueryAttribute.value" type="text" class="input-field"
-                                   placeholder="Value"></td>
+
+                <table ng-if="attributes" border="1">
+                    <tr>
+                        <th>Attribute</th>
+                        <th>Data type</th>
+                        <th ng-if="editSchema">Edit</th>
+                    </tr>
+                    <tr ng-repeat="attribute in attributes" ng-class-even="'even'" ng-class-odd="'odd'">
+                        <td>
+                            <span ng-if="updatedAttributeName!=attribute.attributeName">{{attribute.attributeName}}</span>
+                            <input ng-if="updatedAttributeName==attribute.attributeName" ng-model="$parent.newUpdatedAttributeName" type="text" class="input-field" placeholder="Attribute name">
+                        </td>
+                        <td>
+                            <span ng-if="updatedAttributeName!=attribute.attributeName">{{attribute.dataType}}</span>
+                            <input ng-if="updatedAttributeName==attribute.attributeName" ng-model="$parent.newUpdatedAttributeType" type="text" class="input-field" placeholder="Attribute type">
+                        </td>
+
+                        <td ng-if="editSchema">
+                            <button ng-if="updatedAttributeName!=attribute.attributeName" ng-click="startAttributeUpdate(attribute.attributeName, attribute.dataType)">Update</button>
+                            <button ng-if="updatedAttributeName!=attribute.attributeName" ng-click="deleteEnityAttribute(attribute.attributeName)">Delete</button>
+
+                            <button ng-if="updatedAttributeName==attribute.attributeName" ng-click="updateEntityAttribute(attribute.attributeName, $parent.newUpdatedAttributeName, $parent.newUpdatedAttributeType)">Update</button>
+                            <button ng-if="updatedAttributeName==attribute.attributeName" ng-click="cancelAttributeUpdate(attribute.attributeName)">Cancel</button>
+                        </td>
+                    </tr>
+                    <tr ng-if="editSchema">
+                        <th><input ng-model="newAttributeName" type="text" class="input-field" placeholder="Attribute name"></th>
+                        <th><input ng-model="newAttributeType" type="text" class="input-field" placeholder="Attribute type"></th>
+                        <th><button ng-click="addEnityAttribute(newAttributeName, newAttributeType)">Add</button></th>
                     </tr>
                 </table>
                 <br>
-                <button class="button" ng-click="addUpdateAttribute()" style="width: 5%" title="Add attribute">+
-                </button>
-                <button class="button" ng-click="removeUpdateAttribute()" style="width: 5%" title="Remove attribute">-
-                </button>
-                <button ng-disabled="!connected" class="button" ng-click="performUpdate()" style="width: 15%">Send
-                </button>
-            </div>
-
-            <div id="tab-delete" class="tab">
-                <form>
-                    <input ng-model="tableName" type="text" class="input-field" placeholder="Table" style="width: 20%">
-                    <input ng-model="deletePreconditions" type="text" class="input-field" placeholder="Preconditions"
-                           style="width: 60%">
-                    <button ng-disabled="!connected" class="button" ng-click="performDelete()" style="width: 10%">Send
-                    </button>
-                </form>
-            </div>
-
-            <div id="tab-query" class="tab">
-                <form>
-                    <input ng-model="query" type="text" class="input-field" placeholder="Query" style="width: 60%">
-                    <select ng-model="hasResult" class="input-field" style="width: 20%">
-                        <option value="" disabled selected>Response type</option>
-                        <option value="false">Notification</option>
-                        <option value="true">Table records</option>
-                    </select>
-                    <button ng-disabled="!connected" class="button" ng-click="runQuery()" style="width: 10%">Run
-                    </button>
-                </form>
-            </div>
-
-            <div id="tab-schema" class="tab">
-                <select ng-change="displayTable()" ng-init="getEntities()" ng-model="schemaTableName"
-                        class="input-field" style="width: 25%">
-                    <option value="" disabled selected>Select database</option>
-                    <option ng-repeat="entity in entities">{{entity.attributeName}}</option>
-                </select>
-                <input ng-model="tableName" type="text" class="input-field" placeholder="Table" style="width: 25%">
-                <button class="button" ng-click="displayTable()" style="width: 15%">Display</button>
-                <label><input type="checkbox" ng-model="editSchema">Edit</label>
+                <button class="button" style="width: 20%" ng-if="attributes && editSchema" ng-click="deleteEntity()">Delete entity</button>
             </div>
         </div>
     </div>
-    <div class="response-container">
-        <div ng-show="!displaySchema">
-            <h2>Response</h2>
+
+    <div id="right-column">
+        <div class="container" id="history-container">
+            <h2>History</h2>
             <br>
-
-            <table border="1">
-                <tr>
-                    <th ng-repeat="attribute in attributes">
-                        {{attribute.attributeName}}
-                    </th>
-                </tr>
-
-                <tr ng-repeat="row in rows" ng-class-even="'even'" ng-class-odd="'odd'">
-                    <td ng-repeat="value in row.attributes">
-                        {{value}}
-                    </td>
-                </tr>
-            </table>
-        </div>
-
-        <div ng-show="displaySchema">
-            <h2>Schema</h2>
-            <br>
-
-            <table ng-if="(attributes && attributes.length)" border="1">
-                <tr>
-                    <th>Attribute</th>
-                    <th>Data type</th>
-                    <th ng-if="editSchema">Edit</th>
-                </tr>
-                <tr ng-repeat="attribute in attributes" ng-class-even="'even'" ng-class-odd="'odd'">
-                    <td>
-                        <span ng-if="updatedAttributeName!=attribute.attributeName">{{attribute.attributeName}}</span>
-                        <input ng-if="updatedAttributeName==attribute.attributeName"
-                               ng-model="$parent.newUpdatedAttributeName" type="text" class="input-field"
-                               placeholder="Attribute name">
-                    </td>
-                    <td>
-                        <span ng-if="updatedAttributeName!=attribute.attributeName">{{attribute.dataType}}</span>
-                        <input ng-if="updatedAttributeName==attribute.attributeName"
-                               ng-model="$parent.newUpdatedAttributeType" type="text" class="input-field"
-                               placeholder="Attribute type">
-                    </td>
-
-                    <td ng-if="editSchema">
-                        <button ng-if="updatedAttributeName!=attribute.attributeName"
-                                ng-click="startAttributeUpdate(attribute.attributeName, attribute.dataType)">Update
-                        </button>
-                        <button ng-if="updatedAttributeName!=attribute.attributeName"
-                                ng-click="deleteEnityAttribute(attribute.attributeName)">Delete
-                        </button>
-
-                        <button ng-if="updatedAttributeName==attribute.attributeName"
-                                ng-click="updateEntityAttribute(attribute.attributeName, $parent.newUpdatedAttributeName, $parent.newUpdatedAttributeType)">
-                            Update
-                        </button>
-                        <button ng-if="updatedAttributeName==attribute.attributeName"
-                                ng-click="cancelAttributeUpdate(attribute.attributeName)">Cancel
-                        </button>
-                    </td>
-                </tr>
-                <tr ng-if="editSchema">
-                    <th><input ng-model="newAttributeName" type="text" class="input-field" placeholder="Attribute name">
-                    </th>
-                    <th><input ng-model="newAttributeType" type="text" class="input-field" placeholder="Attribute type">
-                    </th>
-                    <th>
-                        <button ng-click="addEnityAttribute(newAttributeName, newAttributeType)">Add</button>
-                    </th>
-                </tr>
-            </table>
-        </div>
-    </div>
-</div>
-
-<div id="right-column">
-    <div class="container" id="history-container">
-        <h2>History</h2>
-        <br>
-
-        <div class="content" id="history-content">
+            <div class="content" id="history-content">
                 <span ng-if="history.length == 0">
                     None
                 </span>
-            <ul class="historyList">
-                <li ng-repeat="historyItem in history">
-                    <span ng-if="historyItem.success" class="successFulHistoryItem">{{historyItem.type}}</span>
-                    <span ng-if="!historyItem.success" class="unsuccessFulHistoryItem">{{historyItem.type}}</span>
-                </li>
-            </ul>
+                <ul class="historyList">
+                    <li ng-repeat="historyItem in history">
+                        <span ng-if="historyItem.success" class="successFulHistoryItem">{{historyItem.type}}</span>
+                        <span ng-if="!historyItem.success" class="unsuccessFulHistoryItem">{{historyItem.type}}</span>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
-</div>
 </body>
 </html>
