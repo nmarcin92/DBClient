@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 
 import pl.edu.agh.dbclient.WebAppConstants;
 import pl.edu.agh.dbclient.connections.DBConnection;
+import pl.edu.agh.dbclient.connections.DBConnectionType;
 import pl.edu.agh.dbclient.connections.DBCredentials;
 import pl.edu.agh.dbclient.exceptions.ConnectionInitializationException;
 import pl.edu.agh.dbclient.exceptions.DBClientException;
@@ -24,6 +25,7 @@ import pl.edu.agh.dbclient.objects.Entity;
 import pl.edu.agh.dbclient.objects.EntityAttribute;
 import pl.edu.agh.dbclient.objects.EntityRow;
 import pl.edu.agh.dbclient.objects.QueryResult;
+import pl.edu.agh.dbclient.objects.UserSession;
 import pl.edu.agh.dbclient.objects.operations.CommandOperation;
 import pl.edu.agh.dbclient.objects.operations.CreateOperation;
 import pl.edu.agh.dbclient.objects.operations.DeleteOperation;
@@ -32,6 +34,8 @@ import pl.edu.agh.dbclient.objects.operations.ReadOperation;
 import pl.edu.agh.dbclient.objects.operations.UpdateOperation;
 import pl.edu.agh.dbclient.utils.Utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
@@ -88,6 +92,14 @@ public abstract class GenericSQLConnection implements DBConnection {
 		}
 	}
 
+	public static void main(String[] args) throws JsonProcessingException {
+		ReadOperation rop = new ReadOperation(Operation.OperationContext.DATABASE, "n");
+		DBCredentials cred = new DBCredentials("postgres", "postgres", "localhost:5432", "postgres");
+		UserSession userSession = new UserSession(DBConnectionType.POSTGRESQL, cred);
+		rop.setUserSession(userSession);
+		System.out.println(new ObjectMapper().writeValueAsString(rop));
+	}
+
 	private QueryResult readDatabaseSchema(ReadOperation operation) throws DatabaseException {
 		QueryResult qr = new QueryResult();
 		Entity entity = new Entity("TABLES");
@@ -98,7 +110,7 @@ public abstract class GenericSQLConnection implements DBConnection {
 		try {
 			ResultSet resultSet = conn.createStatement().executeQuery(queryBuilder.toString());
 			while (resultSet.next()) {
-				entity.getAttributes().add(new EntityAttribute(resultSet.getString(0)));
+				entity.getAttributes().add(new EntityAttribute(resultSet.getString(1)));
 			}
 		} catch (SQLException e) {
 			LOGGER.error("Error during reading table schema", e);
