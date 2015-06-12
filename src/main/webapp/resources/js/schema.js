@@ -133,7 +133,6 @@ function updateEntityAttribute($scope, $http, attributeName){
             "oldName": attributeName,
             "newName": $scope.newUpdatedAttributeName
         }],
-        "id": null,
         "updated": null,
 
         "userSession": {
