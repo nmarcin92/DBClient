@@ -1,3 +1,13 @@
+function compare(a1,a2) {
+    if (a1.attributeName < a2.attributeName)
+        return -1;
+    if (a1.attributeName > a2.attributeName)
+        return 1;
+    return 0;
+}
+
+objs.sort(compare);
+
 function performRead($scope, $http){
     var data = {
             "parameters": {},
@@ -32,11 +42,27 @@ function performRead($scope, $http){
     $http.post(serverUrl + "/read", data).
         success(function(data, status, headers, config) {
             if(data.success){
-                //pass attributes names
-                $scope.attributes = data.entity.attributes;
-                $scope.rows = data.entity.rows;
+                //mongo db
+                if($scope.databaseType == "MONGODB"){
+                    $scope.mongoOutput = true;
 
-                $scope.history[$scope.history.length] = new historyItem("Read", true);
+                    $scope.documents = [];
+
+                    for(var i = 0; i < data.entity.rows.length; i++){
+                        $scope.documents[$scope.documents.length] = JSON.stringify(data.entity.rows[i].attributes,null,"    ");
+                    }
+                }
+                //normal output
+                else {
+                    $scope.mongoOutput = false;
+
+                    //pass attributes names
+                    $scope.attributes = data.entity.attributes;
+                    $scope.attributes.sort(compare);
+                    $scope.rows = data.entity.rows;
+
+                    $scope.history[$scope.history.length] = new historyItem("Read", true);
+                }
             } else {
                 $scope.history[$scope.history.length] = new historyItem("Read", false);
                 alert("Server error");
