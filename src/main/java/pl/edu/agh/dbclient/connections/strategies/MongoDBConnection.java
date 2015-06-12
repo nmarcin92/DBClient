@@ -244,6 +244,7 @@ public class MongoDBConnection implements DBConnection {
 
     @Override
     public QueryResult executeCommand(CommandOperation command) throws DBClientException {
+        initializeConnection();
         QueryResult qr = new QueryResult();
         CommandResult res = db.command(command.getQuery());
         Entity entity = new Entity("result");
