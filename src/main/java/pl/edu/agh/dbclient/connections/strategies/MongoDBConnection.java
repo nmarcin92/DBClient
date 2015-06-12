@@ -250,12 +250,13 @@ public class MongoDBConnection implements DBConnection {
         Entity entity = new Entity("result");
         try {
             String json = new ObjectMapper().writeValueAsString(res);
-            Map<String, String> map = new ObjectMapper().readValue(json, Map.class);
-            for (Map.Entry<String, String> entry : map.entrySet()) {
-                entity.getAttributes().add(new EntityAttribute(entry.getKey()));
-            }
+            Map<String, Object> map = new ObjectMapper().readValue(json, Map.class);
             EntityRow row = new EntityRow();
-            row.getAttributes().putAll(map);
+
+            for (Map.Entry<String, Object> entry : map.entrySet()) {
+                entity.getAttributes().add(new EntityAttribute(entry.getKey()));
+                row.getAttributes().put(entry.getKey(), entry.getValue().toString());
+            }
             entity.getRows().add(row);
             qr.setEntity(entity);
 
