@@ -1,5 +1,7 @@
 package pl.edu.agh.dbclient.connections.strategies;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Function;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Collections2;
@@ -19,6 +21,7 @@ import pl.edu.agh.dbclient.objects.EntityRow;
 import pl.edu.agh.dbclient.objects.QueryResult;
 import pl.edu.agh.dbclient.objects.operations.*;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.List;
@@ -241,6 +244,26 @@ public class MongoDBConnection implements DBConnection {
 
     @Override
     public QueryResult executeCommand(CommandOperation command) throws DBClientException {
-        return null;
+        QueryResult qr = new QueryResult();
+        CommandResult res = db.command(command.getQuery());
+        Entity entity = new Entity("result");
+        try {
+            String json = new ObjectMapper().writeValueAsString(res);
+            Map<String, String> map = new ObjectMapper().readValue(json, Map.class);
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                entity.getAttributes().add(new EntityAttribute(entry.getKey()));
+            }
+            EntityRow row = new EntityRow();
+            row.getAttributes().putAll(map);
+            entity.getRows().add(row);
+            qr.setEntity(entity);
+
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return qr;
     }
 }
