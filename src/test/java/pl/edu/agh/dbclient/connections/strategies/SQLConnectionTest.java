@@ -18,12 +18,10 @@ import pl.edu.agh.dbclient.config.root.RootContextConfig;
 import pl.edu.agh.dbclient.config.servlet.ServletContextConfig;
 import pl.edu.agh.dbclient.connections.DBConnectionType;
 import pl.edu.agh.dbclient.connections.DBCredentials;
+import pl.edu.agh.dbclient.objects.EntityAttribute;
 import pl.edu.agh.dbclient.objects.EntityRow;
 import pl.edu.agh.dbclient.objects.UserSession;
-import pl.edu.agh.dbclient.objects.operations.CreateOperation;
-import pl.edu.agh.dbclient.objects.operations.Operation;
-import pl.edu.agh.dbclient.objects.operations.ReadOperation;
-import pl.edu.agh.dbclient.objects.operations.UpdateOperation;
+import pl.edu.agh.dbclient.objects.operations.*;
 
 import java.util.Arrays;
 
@@ -56,7 +54,7 @@ public class SQLConnectionTest {
     }
 
     @Test
-    public void testCreateAndReadRow() throws Exception {
+    public void testCreateReadAndDeleteRow() throws Exception {
         CreateOperation operation = new CreateOperation(Operation.OperationContext.RECORD, "clients");
         operation.addAttribute("name", "John");
         operation.addAttribute("age", "20");
@@ -83,6 +81,20 @@ public class SQLConnectionTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.['success']").value(true));
+
+
+        DeleteOperation op = new DeleteOperation(Operation.OperationContext.RECORD, "clients");
+        op.setUserSession(userSession);
+        op.setPreconditions(Arrays.asList("id='123'"));
+
+        mockMvc.perform(post(WebAppConstants.DELETE_RESOURCE_PATH)
+                .content(objectMapper.writeValueAsString(op))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$.['success']").value(true));
     }
 
     @Test
@@ -102,6 +114,102 @@ public class SQLConnectionTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.['success']").value(true));
+    }
+
+    @Test
+    public void testCreateReadAndDeleteTable() throws Exception {
+        CreateOperation operation = new CreateOperation(Operation.OperationContext.ENTITY, "customers");
+        operation.setUserSession(userSession);
+
+        mockMvc.perform(post(WebAppConstants.CREATE_RESOURCE_PATH)
+                .content(objectMapper.writeValueAsString(operation))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$.['success']").value(true));
+
+        ReadOperation read = new ReadOperation(Operation.OperationContext.ENTITY, "customers");
+        read.setUserSession(userSession);
+
+        mockMvc.perform(post(WebAppConstants.READ_RESOURCE_PATH)
+                .content(objectMapper.writeValueAsString(read))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$.['success']").value(true));
+
+        UpdateOperation upOp = new UpdateOperation(Operation.OperationContext.ENTITY, "customers");
+        upOp.setUserSession(userSession);
+        upOp.getToAdd().add(new EntityAttribute("lastname", "varchar(20)"));
+
+        mockMvc.perform(post(WebAppConstants.UPDATE_RESOURCE_PATH)
+                .content(objectMapper.writeValueAsString(upOp))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$.['success']").value(true));
+
+        UpdateOperation upOp2 = new UpdateOperation(Operation.OperationContext.ENTITY, "customers");
+        upOp2.setUserSession(userSession);
+        upOp2.getToRename().add(new AttributeRename("lastname", "surname"));
+
+        mockMvc.perform(post(WebAppConstants.UPDATE_RESOURCE_PATH)
+                .content(objectMapper.writeValueAsString(upOp2))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$.['success']").value(true));
+
+        UpdateOperation upOp3 = new UpdateOperation(Operation.OperationContext.ENTITY, "customers");
+        upOp3.setUserSession(userSession);
+        upOp3.getToDelete().add(new EntityAttribute("surname"));
+
+        mockMvc.perform(post(WebAppConstants.UPDATE_RESOURCE_PATH)
+                .content(objectMapper.writeValueAsString(upOp3))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$.['success']").value(true));
+
+
+        DeleteOperation op = new DeleteOperation(Operation.OperationContext.ENTITY, "customers");
+        op.setUserSession(userSession);
+
+        mockMvc.perform(post(WebAppConstants.DELETE_RESOURCE_PATH)
+                .content(objectMapper.writeValueAsString(op))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$.['success']").value(true));
+    }
+
+    @Test
+    public void testReadSchema() throws Exception {
+        ReadOperation read = new ReadOperation(Operation.OperationContext.DATABASE, "");
+        read.setUserSession(userSession);
+
+        mockMvc.perform(post(WebAppConstants.READ_RESOURCE_PATH)
+                .content(objectMapper.writeValueAsString(read))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$.['success']").value(true));
+
+
     }
 
 }

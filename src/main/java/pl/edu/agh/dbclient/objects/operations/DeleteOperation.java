@@ -23,4 +23,8 @@ public class DeleteOperation extends Operation<DeleteOperation> {
     public List<String> getPreconditions() {
         return preconditions;
     }
+
+    public void setPreconditions(List<String> preconditions) {
+        this.preconditions = preconditions;
+    }
 }

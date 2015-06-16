@@ -1,7 +1,5 @@
 package pl.edu.agh.dbclient.connections.strategies;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
@@ -9,12 +7,14 @@ import com.google.common.collect.Collections2;
 import org.apache.log4j.Logger;
 import pl.edu.agh.dbclient.WebAppConstants;
 import pl.edu.agh.dbclient.connections.DBConnection;
-import pl.edu.agh.dbclient.connections.DBConnectionType;
 import pl.edu.agh.dbclient.connections.DBCredentials;
 import pl.edu.agh.dbclient.exceptions.ConnectionInitializationException;
 import pl.edu.agh.dbclient.exceptions.DBClientException;
 import pl.edu.agh.dbclient.exceptions.DatabaseException;
-import pl.edu.agh.dbclient.objects.*;
+import pl.edu.agh.dbclient.objects.Entity;
+import pl.edu.agh.dbclient.objects.EntityAttribute;
+import pl.edu.agh.dbclient.objects.EntityRow;
+import pl.edu.agh.dbclient.objects.QueryResult;
 import pl.edu.agh.dbclient.objects.operations.*;
 import pl.edu.agh.dbclient.utils.Utils;
 
@@ -70,14 +70,6 @@ public abstract class GenericSQLConnection implements DBConnection {
                 LOGGER.error("Unsupported operation context: " + operation.getContext());
                 throw new DatabaseException(WebAppConstants.UNSUPPORTED_OPERATION_CONTEXT_ERROR);
         }
-    }
-
-    public static void main(String[] args) throws JsonProcessingException {
-        ReadOperation rop = new ReadOperation(Operation.OperationContext.DATABASE, "n");
-        DBCredentials cred = new DBCredentials("postgres", "postgres", "localhost:5432", "postgres");
-        UserSession userSession = new UserSession(DBConnectionType.POSTGRESQL, cred);
-        rop.setUserSession(userSession);
-        System.out.println(new ObjectMapper().writeValueAsString(rop));
     }
 
     private QueryResult readDatabaseSchema(ReadOperation operation) throws DatabaseException {
@@ -190,10 +182,14 @@ public abstract class GenericSQLConnection implements DBConnection {
         }
 
         try {
-            LOGGER.info(queryBuilder.toString());
-            LOGGER.info(renameBuilder.toString());
-            conn.createStatement().execute(queryBuilder.toString());
-            conn.createStatement().execute(renameBuilder.toString());
+            if (!first) {
+                LOGGER.info(queryBuilder.toString());
+                conn.createStatement().execute(queryBuilder.toString());
+            }
+            if (renamed) {
+                LOGGER.info(renameBuilder.toString());
+                conn.createStatement().execute(renameBuilder.toString());
+            }
         } catch (SQLException e) {
             LOGGER.error("Error while updating table", e);
             throw new DatabaseException(e.getMessage());
