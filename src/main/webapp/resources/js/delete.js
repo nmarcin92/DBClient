@@ -18,18 +18,25 @@ function performDelete($scope, $http){
     $http.post(serverUrl + "/delete", data).
         success(function(data, status, headers, config) {
             if(data.success){
-                //pass attributes names
-                $scope.attributes = [{"attributeName" : "Status"}];
-                $scope.rows = [{"attributes" : {"Status" : "Success"}}]
-                $scope.history[$scope.history.length] = new historyItem("Delete", true);
+                if($scope.databaseType == "MONGODB"){
+                    $scope.mongoOutput = true;
+                    $scope.documents = ["Success"];
+                }
+                else {
+                    $scope.mongoOutput = false;
+                    //pass attributes names
+                    $scope.attributes = [{"attributeName": "Status"}];
+                    $scope.rows = [{"attributes": {"Status": "Success"}}]
+                }
+                $scope.history[$scope.history.length] = new historyItem("Delete", true, $scope);
             } else {
-                $scope.history[$scope.history.length] = new historyItem("Delete", false);
+                $scope.history[$scope.history.length] = new historyItem("Delete", false, $scope);
                 alert("Server error");
                 console.log(data.errors)
             }
         }).
         error(function(data, status, headers, config) {
             alert("error")
-            $scope.history[$scope.history.length] = new historyItem("Delete", false);
+            $scope.history[$scope.history.length] = new historyItem("Delete", false, $scope);
         });
 }

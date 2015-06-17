@@ -39,19 +39,27 @@ function performUpdate($scope, $http){
     $http.post(serverUrl + "/update", data).
         success(function(data, status, headers, config) {
             if(data.success){
-                //pass attributes names
-                $scope.attributes = [{"attributeName" : "Status"}];
-                $scope.rows = [{"attributes" : {"Status" : "Success"}}]
+                if($scope.databaseType == "MONGODB"){
+                    $scope.mongoOutput = true;
+                    $scope.documents = ["Success"];
+                }
+                else {
+                    $scope.mongoOutput = false;
 
-                $scope.history[$scope.history.length] = new historyItem("Create", true);
+                    //pass attributes names
+                    $scope.attributes = [{"attributeName": "Status"}];
+                    $scope.rows = [{"attributes": {"Status": "Success"}}]
+                }
+
+                $scope.history[$scope.history.length] = new historyItem("Update", true, $scope);
             } else {
-                $scope.history[$scope.history.length] = new historyItem("Create", false);
+                $scope.history[$scope.history.length] = new historyItem("Update", false, $scope);
                 alert("Server error");
                 console.log(data.errors)
             }
         }).
         error(function(data, status, headers, config) {
             alert("error")
-            $scope.history[$scope.history.length] = new historyItem("Create", false);
+            $scope.history[$scope.history.length] = new historyItem("Update", false, $scope);
         });
 }

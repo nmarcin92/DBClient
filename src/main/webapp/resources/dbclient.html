@@ -123,9 +123,10 @@
                         <option value="" disabled selected>Select entity to display</option>
                         <option ng-repeat="entity in entities">{{entity.attributeName}}</option>
                     </select>
-                    <input ng-model="newEntityName" type="text" class="input-field" placeholder="New entity name" style="width: 20%">
-                    <button class="button" ng-click="createEntity()" style="width: 15%" >Create</button>
-                    <label><input type="checkbox" ng-model="editSchema">Edit</label>
+                    <button class="button" style="width: 20%" ng-if="databaseType == 'MONGODB'" ng-click="deleteEntity()">Delete entity</button>
+                    <input ng-if="databaseType != 'MONGODB'" ng-model="newEntityName" type="text" class="input-field" placeholder="New entity name" style="width: 20%">
+                    <button ng-if="databaseType != 'MONGODB'" class="button" ng-click="createEntity()" style="width: 15%" >Create</button>
+                    <label ng-if="databaseType != 'MONGODB'"><input type="checkbox" ng-model="editSchema">Edit</label>
                 </div>
             </div>
         </div>
@@ -161,7 +162,7 @@
                 <h2>Schema</h2>
                 <br>
 
-                <table ng-if="attributes" border="1">
+                <table ng-if="attributes && (databaseType != 'MONGODB')" border="1">
                     <tr>
                         <th>Attribute</th>
                         <th>Data type</th>
@@ -192,7 +193,7 @@
                     </tr>
                 </table>
                 <br>
-                <button class="button" style="width: 20%" ng-if="attributes && editSchema" ng-click="deleteEntity()">Delete entity</button>
+                <button class="button" style="width: 20%" ng-if="attributes && editSchema && (databaseType != 'MONGODB')" ng-click="deleteEntity()">Delete entity</button>
             </div>
         </div>
     </div>
@@ -207,8 +208,10 @@
                 </span>
                 <ul class="historyList">
                     <li ng-repeat="historyItem in history">
-                        <span ng-if="historyItem.success" class="successFulHistoryItem">{{historyItem.type}}</span>
-                        <span ng-if="!historyItem.success" class="unsuccessFulHistoryItem">{{historyItem.type}}</span>
+                        <a href="#" ng-click="historyItem.restore()">
+                            <span ng-if="historyItem.success" class="successFulHistoryItem">{{historyItem.name}}</span>
+                            <span ng-if="!historyItem.success" class="unsuccessFulHistoryItem">{{historyItem.name}}</span>
+                        </a>
                     </li>
                 </ul>
             </div>

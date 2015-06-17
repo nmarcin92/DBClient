@@ -6,7 +6,6 @@ function compare(a1,a2) {
     return 0;
 }
 
-objs.sort(compare);
 
 function performRead($scope, $http){
     var data = {
@@ -60,17 +59,16 @@ function performRead($scope, $http){
                     $scope.attributes = data.entity.attributes;
                     $scope.attributes.sort(compare);
                     $scope.rows = data.entity.rows;
-
-                    $scope.history[$scope.history.length] = new historyItem("Read", true);
                 }
+                $scope.history[$scope.history.length] = new historyItem("Read", true, $scope);
             } else {
-                $scope.history[$scope.history.length] = new historyItem("Read", false);
+                $scope.history[$scope.history.length] = new historyItem("Read", false, $scope);
                 alert("Server error");
                 console.log(data.errors)
             }
         }).
         error(function(data, status, headers, config) {
             alert("error")
-            $scope.history[$scope.history.length] = new historyItem("Read", false);
+            $scope.history[$scope.history.length] = new historyItem("Read", false, $scope);
         });
 }

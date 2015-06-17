@@ -71,4 +71,6 @@ function setConnection($scope){
         $scope.connected = false;
 
     }
+
+    $scope.history = [];
 }

@@ -1,5 +1,6 @@
 //displaying selected table
 function displayTable($scope, $http){
+    if($scope.databaseType == "MONGODB") return;
     var data = {
         "parameters": {},
         "context": "ENTITY",
@@ -147,7 +148,6 @@ function updateEntityAttribute($scope, $http, attributeName){
 
     };
 
-    console.log(data);
 
     $http.post(serverUrl + "/update", data).
         success(function(data, status, headers, config) {
@@ -168,7 +168,6 @@ function updateEntityAttribute($scope, $http, attributeName){
 //getting list of all tables
 function getEntities($scope, $http){
     if(!$scope.connected) return;
-    if($scope.databaseType == "MONGODB") return;
     var data = {
         "parameters": {},
         "context": "DATABASE",

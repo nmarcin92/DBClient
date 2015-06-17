@@ -20,9 +20,20 @@ function runQuery($scope, $http){
         success(function(data, status, headers, config) {
             if(data.success){
                 if($scope.hasResult == "true") {
-                    //pass attributes names
-                    $scope.attributes = data.entity.attributes;
-                    $scope.rows = data.entity.rows;
+                    if($scope.databaseType == "MONGODB"){
+                        $scope.mongoOutput = true;
+                        $scope.documents = [];
+
+                        for(var i = 0; i < data.entity.rows.length; i++){
+                            $scope.documents[$scope.documents.length] = JSON.stringify(data.entity.rows[i].attributes,null,"    ");
+                        }
+                    }
+                    else {
+                        $scope.mongoOutput = false;
+                        //pass attributes names
+                        $scope.attributes = data.entity.attributes;
+                        $scope.rows = data.entity.rows;
+                    }
                 }
                 else {
                     $scope.attributes = [{"attributeName" : "Status"}];
