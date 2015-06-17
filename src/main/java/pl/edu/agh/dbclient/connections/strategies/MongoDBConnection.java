@@ -20,6 +20,7 @@ import pl.edu.agh.dbclient.objects.EntityAttribute;
 import pl.edu.agh.dbclient.objects.EntityRow;
 import pl.edu.agh.dbclient.objects.QueryResult;
 import pl.edu.agh.dbclient.objects.operations.*;
+import pl.edu.agh.dbclient.utils.Utils;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -202,21 +203,23 @@ public class MongoDBConnection implements DBConnection {
             DBObject removeQuery = new BasicDBObject();
             List<String> parts;
             List<BasicDBObject> subqueries = Lists.newArrayList();
-            for (String prec : operation.getPreconditions()) {
-                if (prec.contains("=")) {
-                    parts = Splitter.on("=").splitToList(prec);
-                    subqueries.add(new BasicDBObject(parts.get(0), new BasicDBObject("$eq", parts.get(1))));
-                } else if (prec.contains("<")) {
-                    parts = Splitter.on("<").splitToList(prec);
-                    subqueries.add(new BasicDBObject(parts.get(0), new BasicDBObject("$lt", parts.get(1))));
-                } else if (prec.contains(">")) {
-                    parts = Splitter.on(">").splitToList(prec);
-                    subqueries.add(new BasicDBObject(parts.get(0), new BasicDBObject("$gt", parts.get(1))));
-                } else if (prec.contains("<>")) {
-                    parts = Splitter.on("<>").splitToList(prec);
-                    subqueries.add(new BasicDBObject(parts.get(0), new BasicDBObject("$ne", parts.get(1))));
-                } else {
-                    throw new DBClientException("Unsupported precondition");
+            if (!Utils.isEmptyCollection(operation.getPreconditions())) {
+                for (String prec : operation.getPreconditions()) {
+                    if (prec.contains("=")) {
+                        parts = Splitter.on("=").splitToList(prec);
+                        subqueries.add(new BasicDBObject(parts.get(0), new BasicDBObject("$eq", parts.get(1))));
+                    } else if (prec.contains("<")) {
+                        parts = Splitter.on("<").splitToList(prec);
+                        subqueries.add(new BasicDBObject(parts.get(0), new BasicDBObject("$lt", parts.get(1))));
+                    } else if (prec.contains(">")) {
+                        parts = Splitter.on(">").splitToList(prec);
+                        subqueries.add(new BasicDBObject(parts.get(0), new BasicDBObject("$gt", parts.get(1))));
+                    } else if (prec.contains("<>")) {
+                        parts = Splitter.on("<>").splitToList(prec);
+                        subqueries.add(new BasicDBObject(parts.get(0), new BasicDBObject("$ne", parts.get(1))));
+                    } else {
+                        throw new DBClientException("Unsupported precondition");
+                    }
                 }
             }
             removeQuery.put("$and", subqueries);
