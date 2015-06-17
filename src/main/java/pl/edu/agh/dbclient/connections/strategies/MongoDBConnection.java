@@ -98,12 +98,26 @@ public class MongoDBConnection implements DBConnection {
     public QueryResult performRead(ReadOperation operation) throws DBClientException {
         initializeConnection();
         switch (operation.getContext()) {
+            case DATABASE:
+                return getAllCollections(operation);
             case RECORD:
                 return readCollection(operation);
             default:
                 LOGGER.error("Unsupported operation context: " + operation.getContext());
                 throw new DatabaseException(WebAppConstants.UNSUPPORTED_OPERATION_CONTEXT_ERROR);
         }
+    }
+
+    private QueryResult getAllCollections(ReadOperation operation) {
+        QueryResult qr = new QueryResult();
+        Entity entity = new Entity("TABLES");
+
+        for (String colName : db.getCollectionNames()) {
+            entity.getAttributes().add(new EntityAttribute(colName));
+        }
+
+        qr.setEntity(entity);
+        return qr;
     }
 
     private QueryResult readCollection(ReadOperation operation) throws DBClientException {
